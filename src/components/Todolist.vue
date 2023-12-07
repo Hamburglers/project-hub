@@ -107,12 +107,14 @@ function toggleMode() {
 const darkBool = computed(() => modeIndex.value === 0);
 
 watch(darkBool, (newValue) => {
+  const bodyElement = document.querySelector('#body'); // Select the element with class 'body'
+
   if (newValue) {
-    document.body.classList.add('dark');
-    document.body.classList.remove('light');
+    bodyElement.classList.add('dark');
+    bodyElement.classList.remove('light');
   } else {
-    document.body.classList.remove('dark');
-    document.body.classList.add('light');
+    bodyElement.classList.remove('dark');
+    bodyElement.classList.add('light');
   }
 });
 
@@ -124,7 +126,12 @@ onMounted(() => {
     originalList.value = [...list.value];
     fetchTodos();
   }
-  document.body.classList.add(modeIndex.value === 0 ? 'dark' : 'light');
+
+  const bodyElement = document.querySelector('#body'); // Select the element with class 'body'
+  if (bodyElement) {
+    bodyElement.classList.add(modeIndex.value === 0 ? 'dark' : 'light');
+  }
+
   ws.value = new WebSocket('wss://hamburgler.xyz:8081/ws');
   ws.value.onmessage = (event) => {
   // Only update the list from WebSocket data if the user is logged in
@@ -231,43 +238,44 @@ function completion(item) {
 }
 
 function back() {
-  document.body.className = '';
   window.location.hash = '/';
 }
 
 </script>
 
 <template>
-  <Transition>
-    <header>
-      <button @click="back" style="font-size:13px">Back</button>
-      <button v-if="!isLoggedIn" @click="login" style="font-size: 13px; width: 100px;">Login / Register</button>
-      <button v-else @click="logout" style="font-size: 13px; width: 100px;">Logged in</button>
-      <button @click="toggleMode"><img :src="switchMode[modeIndex].src" class="white-image"></button>
-    </header>
-  </Transition>
-  <h2>To do</h2>
-  <form @submit.prevent="submission">
-    <input ref="inputRef" placeholder="e.g. Walk Odie" v-model="inputValue">
-    <button id="add">+</button>
-  </form>
-  <ul>
-    <TransitionGroup name="list" tag="ul">
-      <li v-for="(item, index) in filteredList" :key="item.id" @click="completion(item)"
-          :class="{ complete: item.complete }">{{ item.text }}
-          <div>
-            <button @click.stop="editItem(index)" class="edit"><img src="/edit.png"></button>
-            <button @click.stop="deleteItem(index)" class="delete"><img src="/delete.png"></button>
-          </div>
-      </li>
-  </TransitionGroup>
-  </ul>
-  <footer>
-    <button @click="hideCompleted = !hideCompleted" id="hide">Hide completed</button>
-  </footer>
+  <div id="body">
+    <Transition>
+      <header>
+        <button @click="back" style="font-size:13px">Back</button>
+        <button v-if="!isLoggedIn" @click="login" style="font-size: 13px; width: 100px;">Login / Register</button>
+        <button v-else @click="logout" style="font-size: 13px; width: 100px;">Logged in</button>
+        <button @click="toggleMode"><img :src="switchMode[modeIndex].src" class="white-image"></button>
+      </header>
+    </Transition>
+    <h2>To do</h2>
+    <form @submit.prevent="submission">
+      <input ref="inputRef" placeholder="e.g. Walk Odie" v-model="inputValue">
+      <button id="add">+</button>
+    </form>
+    <ul>
+      <TransitionGroup name="list" tag="ul">
+        <li v-for="(item, index) in filteredList" :key="item.id" @click="completion(item)"
+            :class="{ complete: item.complete }">{{ item.text }}
+            <div id="buttons">
+              <button @click.stop="editItem(index)" class="edit"><img src="/edit.png"></button>
+              <button @click.stop="deleteItem(index)" class="delete"><img src="/delete.png"></button>
+            </div>
+        </li>
+    </TransitionGroup>
+    </ul>
+    <footer>
+      <button @click="hideCompleted = !hideCompleted" id="hide">Hide completed</button>
+    </footer>
+  </div>
 </template>
 
-<style>
+<style scoped>
 
 img {
   width: 20px;
@@ -277,7 +285,16 @@ img {
   display: flex;
 }
 
-body {
+div {
+  display: flex;
+  flex-direction: column;
+}
+
+div#buttons {
+  flex-direction: row;
+}
+
+div#body {
   font-family: "Roboto", sans-serif;
   font-size: larger;
   display: flex;
@@ -292,6 +309,7 @@ body {
   box-sizing: border-box;
 }
 
+
 .light {
   background-image: linear-gradient(to right, rgb(255, 134, 255), rgb(113, 113, 250));
 }
@@ -301,8 +319,7 @@ body {
 }
 
 h2 {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   padding: 20px;
   color: white;
 }
@@ -342,8 +359,25 @@ ul {
   display: flex;
   flex-direction: column;
   margin: 0px;
-  padding: 15px 0 0 0;
+  padding: 15px 20px 10px 20px;
   gap: 15px;
+  max-height: 475px;
+  overflow-x: hidden;
+  overflow-y: auto; /* Make it scrollable */
+  flex: 1;
+}
+
+/* Styles for scrollbar */
+ul::-webkit-scrollbar {
+  width: 10px;
+}
+
+ul::-webkit-scrollbar-thumb {
+  background: #ffffff; 
+}
+
+ul::-webkit-scrollbar-thumb:hover {
+  background: #ffffff; 
 }
 
 li {
@@ -353,6 +387,7 @@ li {
   padding: 7px;
   width: 65vw;
   max-width: 500px;
+  height: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -441,12 +476,7 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   width: 100%;
-  padding: 10px 0;
-  margin-bottom: 40px;
+  margin-bottom: 0px;
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import Todolist from './components/Todolist.vue'
 
 const routes = {
@@ -10,41 +10,48 @@ const currentPath = ref(window.location.hash)
 
 window.addEventListener('hashchange', () => {
   currentPath.value = window.location.hash
-  if (currentPath.value === '#/') {
-    buttonClicked.value = false;
-  }
 })
 
 const currentView = computed(() => {
-  return routes[currentPath.value.slice(1) || '/']
+  return routes[currentPath.value.slice(1) || null]
 })
 
-const buttonClicked = ref(localStorage.getItem('buttonClicked') === 'true');
-watch(buttonClicked, (newValue) => {
-  localStorage.setItem('buttonClicked', newValue);
-});
 </script>
 
 <template>
-  <div v-if="!buttonClicked">
+  <div v-if="!currentView">
     <header>A collection of projects by Allen</header>
     <div class="linkContainer">
-        <a @click="buttonClicked = true" href="#/todo"><img src="/todolist.png">To do list</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
-        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/todolist.png">To do list</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png">Coming soon</a>
     </div>
   </div>
   <component :is="currentView" />
 </template>
 
+<style>
+body {
+  display: flex;
+  font-family: "Roboto", sans-serif;
+  font-size: larger;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  min-width: none;
+  min-height: none;
+  margin: 0px;
+}
+</style>
+
 <style scoped>
 header {
-  justify-content: center;
+  text-align: center;
   align-items: center;
   margin-top: 0px;
   margin-bottom: 30px;
@@ -53,16 +60,11 @@ header {
   left: 0px;
   right: 0px;
   width: 100%;
-  max-width: none;
-}
-
-body {
-  display: flex;
-  background-color: white;
 }
 
 a {
   text-align: center;
+  width: 15vw;
 }
 
 a:hover {
