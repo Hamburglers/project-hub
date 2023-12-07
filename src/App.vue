@@ -1,47 +1,92 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, computed, watch } from 'vue'
+import Todolist from './components/Todolist.vue'
+
+const routes = {
+  '/todo': Todolist
+}
+
+const currentPath = ref(window.location.hash)
+
+window.addEventListener('hashchange', () => {
+  currentPath.value = window.location.hash
+  if (currentPath.value === '#/') {
+    buttonClicked.value = false;
+  }
+})
+
+const currentView = computed(() => {
+  return routes[currentPath.value.slice(1) || '/']
+})
+
+const buttonClicked = ref(localStorage.getItem('buttonClicked') === 'true');
+watch(buttonClicked, (newValue) => {
+  localStorage.setItem('buttonClicked', newValue);
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div v-if="!buttonClicked">
+    <header>A collection of projects by Allen</header>
+    <div class="linkContainer">
+        <a @click="buttonClicked = true" href="#/todo"><img src="/todolist.png">To do list</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a @click="buttonClicked = true" href="#/todo"><img src="/blank.png">Coming soon</a>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
+  <component :is="currentView" />
 </template>
 
 <style scoped>
 header {
-  line-height: 1.5;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0px;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  max-width: none;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+body {
+  display: flex;
+  background-color: white;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+a {
+  text-align: center;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+a:hover {
+  cursor: pointer;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+/* div {
+  border: 1px solid black;
+} */
+.linkContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 80vw;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+img {
+  width: 15vw;
+  height: 15vh;
+  left: 0px;
+  border: 2px solid black;
+  border-radius: 15px;
 }
 </style>
