@@ -61,6 +61,26 @@ const currentView = computed(() => {
         </div>
       </section>
     </section>
+    <div class="custom-shape-divider-top-1702030206">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
+        </svg>
+    </div>
+    <footer>
+      <div id="top">
+        <button><img class="top" src="/icons8-facebook.svg"></button>
+        <button><img class="top" src="/icons8-linkedin.svg"></button>
+        <button><img class="top" src="/icons8-twitter.svg"></button>
+      </div>
+      <div id="middle">
+        <button>Back</button>
+        <button>Terms of Use</button>
+        <button>Privacy Policy</button>
+      </div>
+      <div id="bottom">
+        Copyright &copy; 2023. All Rights Reserved
+      </div>
+    </footer>
   </div>
   <component :is="currentView" />
 </template>
@@ -88,7 +108,7 @@ html {
 </style>
 
 <style scoped>
-
+/*First wave*/
 .custom-shape-divider-top-1702011878 {
     position: relative;
     margin-top: -70px;
@@ -108,6 +128,7 @@ html {
     fill: #060B3E;
 }
 
+/*Second wave*/
 .custom-shape-divider-top-1702017514 {
     position: relative;
     width: 100%;
@@ -127,6 +148,25 @@ html {
     fill: #FFFFFF;
 }
 
+/*Footer*/
+.custom-shape-divider-top-1702030206 {
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    margin-top: -50px;
+}
+
+.custom-shape-divider-top-1702030206 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 74px;
+}
+
+.custom-shape-divider-top-1702030206 .shape-fill {
+    fill: #060B3E;
+}
+
 header, h2{
   display: flex;
   justify-content: center;
@@ -138,6 +178,55 @@ header, h2{
 
 header {
   padding: 0px;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin: -40px 0 0 0;
+  left: 0px;
+  background-color: rgb(7,17,31);
+  padding: 60px 0;
+  border: 0;
+  color: white;
+  width: 100%;
+  gap: 10px;
+}
+
+#top, #middle, #bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  gap: 15px;
+  font-size: 10px;
+}
+
+img.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+  border: none;
+}
+
+button {
+  border: none;
+  color: white;
+  background-color: transparent;
+  transition: scale 0.3s;
+}
+
+button:hover {
+  cursor: pointer;
+  scale: 1.2;
+}
+
+#top > button {
+  border-radius: 50px;
 }
 
 h2 {
