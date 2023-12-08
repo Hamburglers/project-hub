@@ -20,23 +20,37 @@ const currentView = computed(() => {
 
 <template>
   <div v-if="!currentView">
-    <header>A collection of projects by Allen</header>
+    <h2><span>A collection of projects</span></h2>
     <section class="linkContainer">
       <section class="uno">
         <div class="unotext">
-        <a href="#/todo"><img src="/todolist.png">To do list</a>
+        <a href="#/todo"><img src="/todolist.png"></a>
+        <a href="#/todo" id="button">Try the To do list</a>
         <br>
-        Connected to PostgreSQL databse with Websocket and 
+        Includes public login connected to PostgreSQL databse via Websocket and 
           fallback HTTP requests for real time synchronisation.</div>
       </section>
       <section class="dos">
+        <div class="custom-shape-divider-top-1702011878">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+            </svg>
+        </div>
         <div class="dostext">
-        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png"></a>
+        <a href="#/todo" id="button" class="inverse">Coming soon</a>
+        <br>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, odit fugiat et odio, nam quasi corporis aut delectus distinctio, quas nulla libero consequuntur eos illum ea corrupti quos? Vero, error.
         </div>
       </section>
       <section class="tres">
         <div class="trestext">
-        <a href="#/todo"><img src="/blank.png">Coming soon</a>
+        <a href="#/todo"><img src="/blank.png"></a>
+        <a href="#/todo" id="button">Coming soon</a>
+        <br>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro velit ipsa quam quas voluptate quia blanditiis magni temporibus aut doloribus placeat, voluptatibus nemo pariatur incidunt aliquam cumque adipisci totam reiciendis!
         </div>
       </section>
     </section>
@@ -45,6 +59,8 @@ const currentView = computed(() => {
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
   display: flex;
   font-family: "Roboto", sans-serif;
@@ -61,91 +77,154 @@ body {
 
 <style scoped>
 
-header {
-  text-align: center;
-  align-items: center;
+.custom-shape-divider-top-1702011878 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1702011878 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 150px;
+}
+
+.custom-shape-divider-top-1702011878 .shape-fill {
+    fill: #060B3E;
+}
+
+header, h2{
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 20px 0 30px 0px;
   width: 100%;
-  background-color: rgb(175, 175, 175);
+  background-color: #060b3e;
+}
+
+header {
+  padding: 0px;
+}
+
+h2 {
+  background-color: #060b3e;
+}
+
+h2 span {
+  /* Apply gradient to the text */
+  background: linear-gradient(269.92deg, #eca73d -2.94%, #e0546b 107.98%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 section {
   border: 0;
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   position: relative;
 }
 
 a {
+  box-sizing: border-box;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
-  max-width: 35vw;
+  width: 100%;
+  height: 20%;
   gap: 10px;
   justify-content: center;
+  font-size: 25px;
+  border-radius: 5px;
+  color: white;
+  margin-top: 10px;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, scale 0.3s;
 }
 
 a:hover {
   cursor: pointer;
+  background-color: white;
+  color: black;
+  scale: 1.08;
 }
 
-/* div {
-  border: 1px solid black;
-} */
+#button {
+  border: 1px solid white;
+}
+
+.inverse {
+  color: black;
+  background-color: white;
+  transition: background-color 0.3s, color 0.3s, scale 0.3s;
+}
+
+.inverse:hover {
+  scale: 1.08;
+  color: white;
+  background-color: #060b3e;
+  cursor: pointer;
+}
+
 .linkContainer {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
   padding: 40px;
-  width: 100vw;
+  width: 200vw;
   margin-top: -40px;
 }
 
 img {
-  max-width: 50vw;
+  width: 50vw;
   height: auto;
   left: 0px;
   border: 2px solid black;
   border-radius: 15px;
 }
 
-.unotext {
+.unotext, .dostext, .trestext {
   max-width: 35vw;
   font-size: 15px;
-  padding: 40px 15vw;
+  padding: 40px;
 }
 
-.dostext {
-  max-width: 35vw;
-  font-size: 15px;
-  padding: 40px 65vw;
-}
 
-.trestext {
-  max-width: 35vw;
-  font-size: 15px;
-  padding: 40px 50vw;
-}
-
-.uno {
+.uno, .dos, .tres {
   display: flex;
   flex-direction: column;
-  background-color: rgb(175, 175, 175);
+  width: 100%; /* Full width */
   padding: 40px;
-  border: 0px;
+  transition: transform 0.5s; /* Smooth transition for the transform */
+}
+
+.unotext, .dostext, .trestext {
+  max-width: 35vw;
+  font-size: 15px;
+  text-align: center;
+  margin: 0 auto;
+  color: white;
+}
+
+/* Apply transform to shift each section */
+.uno {
+  background-color: #060b3e;
+  transform: translateX(-20vw); /* Shift slightly to the right */
 }
 
 .dos {
-  background-color: rgb(203, 203, 203);
-  padding: 40px;
+  background-color: white;
+  transform: translateX(10vw); /* Shift more to the right */
 }
 
 .tres {
-  background-color: rgb(255, 255, 255);
-  padding: 40px;
+  background-color: #060b3e;
+  transform: translateX(-7vw);
 }
 </style>
