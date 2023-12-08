@@ -39,7 +39,7 @@ const currentView = computed(() => {
             </svg>
         </div>
         <div class="dostext">
-        <a href="#/todo"><img src="/blank.png"></a>
+        <a href="#/todo"><img class="inverse" src="/blank.png"></a>
         <a href="#/todo" id="button" class="inverse">Coming soon</a>
         <br>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, odit fugiat et odio, nam quasi corporis aut delectus distinctio, quas nulla libero consequuntur eos illum ea corrupti quos? Vero, error.
@@ -80,14 +80,18 @@ body {
   margin: 0px;
   overflow-x: hidden;
 }
+
+html {
+  overflow-x: hidden;
+}
+
 </style>
 
 <style scoped>
 
 .custom-shape-divider-top-1702011878 {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
+    margin-top: -70px;
     width: 100%;
     overflow: hidden;
     line-height: 0;
@@ -96,7 +100,7 @@ body {
 .custom-shape-divider-top-1702011878 svg {
     position: relative;
     display: block;
-    width: calc(100% + 1.3px);
+    width: 100%;
     height: 150px;
 }
 
@@ -105,10 +109,9 @@ body {
 }
 
 .custom-shape-divider-top-1702017514 {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
+    margin-top: -70px;
     overflow: hidden;
     line-height: 0;
 }
@@ -123,7 +126,6 @@ body {
 .custom-shape-divider-top-1702017514 .shape-fill {
     fill: #FFFFFF;
 }
-COPY HTMLCOPY CSSDOWNLOAD SVG
 
 header, h2{
   display: flex;
@@ -152,8 +154,7 @@ h2 span {
 
 section {
   border: 0;
-  margin: 0;
-  padding: 0;
+  padding-bottom: 0;
   width: 100%;
   position: relative;
 }
@@ -167,7 +168,7 @@ a {
   height: 20%;
   gap: 10px;
   justify-content: center;
-  font-size: 2vw;
+  font-size: 15px;
   border-radius: 5px;
   color: white;
   margin-top: 10px;
@@ -184,6 +185,10 @@ a:hover {
 
 #button {
   border: 1px solid white;
+}
+
+#button.inverse {
+  border: 2px solid #060b3e;
 }
 
 .inverse {
@@ -211,20 +216,25 @@ a:hover {
 
 img {
   width: 50vw;
+  min-width: 300px;
+  max-width: 600px;
   height: auto;
   left: 0px;
-  border: 2px solid black;
   border-radius: 15px;
+  border: 2px solid black;
 }
 
 .unotext, .dostext, .trestext {
-  max-width: 35vw;
+  max-width: 600px;
+  min-width: 300px;
+  width: 35vw;
   font-size: 15px;
   padding: 40px;
 }
 
 
 .uno, .dos, .tres {
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   width: 100%; /* Full width */
@@ -232,9 +242,11 @@ img {
   transition: transform 0.5s; /* Smooth transition for the transform */
 }
 
+.dos, .tres {
+}
+
 .unotext, .dostext, .trestext {
-  max-width: 35vw;
-  font-size: 1vw;
+  font-size: 13px;
   text-align: center;
   margin: 0 auto;
   color: white;
@@ -247,12 +259,12 @@ img {
 /* Apply transform to shift each section */
 .uno {
   background-color: #060b3e;
-  transform: translateX(-20vw); /* Shift slightly to the right */
+  transform: translateX(-20vw); /* Shift slightly to the left */
 }
 
 .dos {
   background-color: white;
-  transform: translateX(10vw); /* Shift more to the right */
+  transform: translateX(4vw);
 }
 
 .tres {
