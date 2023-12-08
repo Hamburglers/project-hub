@@ -119,7 +119,7 @@ html {
 .custom-shape-divider-top-1702017514 svg {
     position: relative;
     display: block;
-    width: calc(100% + 1.3px);
+    width: calc(150% + 1.3px);
     height: 190px;
 }
 
@@ -178,9 +178,12 @@ a {
 
 a:hover {
   cursor: pointer;
-  background-color: white;
   color: black;
   scale: 1.05;
+}
+
+#button:hover {
+  background-color: white;
 }
 
 #button {
@@ -197,7 +200,7 @@ a:hover {
   transition: background-color 0.3s, color 0.3s, scale 0.3s;
 }
 
-.inverse:hover {
+#button.inverse:hover {
   scale: 1.05;
   color: white;
   background-color: #060b3e;
@@ -242,9 +245,6 @@ img {
   transition: transform 0.5s; /* Smooth transition for the transform */
 }
 
-.dos, .tres {
-}
-
 .unotext, .dostext, .trestext {
   font-size: 13px;
   text-align: center;
@@ -264,11 +264,30 @@ img {
 
 .dos {
   background-color: white;
-  transform: translateX(4vw);
 }
 
 .tres {
   background-color: #060b3e;
-  transform: translateX(-7vw);
 }
+
+/* For smaller screens: Minimum distance */
+@media (max-width: 600px) {
+  .dos {
+    transform: translateX(-40px); /* Minimum distance */
+  }
+  .tres {
+    transform: translateX(-60px);
+  }
+}
+
+/* For larger screens: Maximum distance */
+@media (min-width: 1200px) {
+  .dos {
+    transform: translateX(6vw); /* Maximum distance */
+  }
+  .tres {
+    transform: translateX(-7vw);
+  }
+}
+
 </style>
