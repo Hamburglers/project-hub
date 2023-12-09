@@ -28,6 +28,7 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 
+
 const activeIndex = ref(null);
 
 const handleScroll = () => {
@@ -39,7 +40,12 @@ const handleScroll = () => {
   } else {
     activeIndex.value = 0; // No item active
   }
+  footerVisible.value = !(isNarrowScreen.value && scrollPosition > 1200);
 };
+
+const footerVisible = ref(true);
+const screenWidth = ref(window.innerWidth);
+const isNarrowScreen = computed(() => screenWidth.value < 1200);
 
 </script>
 
@@ -48,7 +54,8 @@ const handleScroll = () => {
     <header class="container">
       <h2>A collection of projects</h2>
     </header>
-    <ul v-scroll-spy-active v-scroll-spy-link>
+    <Transition name="fade">
+    <ul v-scroll-spy-active v-scroll-spy-link v-show="footerVisible">
       <li :class="{ activeSection: activeIndex === 0 }">
         <a>To do list</a>
       </li>
@@ -59,6 +66,7 @@ const handleScroll = () => {
         <a>Coming soon</a>
       </li>
     </ul>
+    </Transition>
     <section class="linkContainer" v-scroll-spy>
       <section id="uno">
         <div class="unotext">
@@ -146,6 +154,13 @@ html {
 </style>
 
 <style scoped>
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
 
 /*First wave*/
 .custom-shape-divider-top-1702011878 {
@@ -471,11 +486,15 @@ li:hover {
     margin: 0;
     margin-left: 10px;
     margin-top: -25px;
-    top: 45px;
+    top: 43px;
     width: 40%; /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
+  }
+
+  li > a {
+    font-size: 10px;
   }
 }
 
