@@ -410,6 +410,7 @@ img {
 
 ul {
   margin-top: 20vh;
+  margin-left: 40px;
   background-color: transparent;
   display: flex;
   flex-direction: column;
@@ -476,15 +477,17 @@ li:hover {
     flex-direction: row;
     height: auto;
     top: 70%;
-    left: 10%;
-    right: 10%;
+    left: 0;
+    right: 0;
     gap: 10%;
+    padding-left: 0;
+    margin-left: 0;
   }
   ul:not(:first-child)::before {
     content: '';
     position: absolute;
     margin: 0;
-    margin-left: 10px;
+    margin-left: 0px;
     margin-top: -25px;
     top: 43px;
     width: 40%; /* Thickness of the line */
@@ -510,16 +513,18 @@ li:hover {
     flex-direction: row;
     height: auto;
     top: 70%;
-    left: 10%;
-    right: 10%;
+    left: 0;
+    right: 0;
     gap: 10%;
+    padding-left: 0;
+    margin-left: 0;
   }
 
   ul:not(:first-child)::before {
     content: '';
     position: absolute;
     margin: 0;
-    margin-left: 10px;
+    margin-left: 0px;
     margin-top: -25px;
     top: 45px;
     width: 40%; /* Thickness of the line */
