@@ -415,29 +415,29 @@ ul:not(:first-child)::before {
     position: absolute;
     margin-top: 20vh;
     margin-left: 20px;
-    top: 40px;
+    top: 55px;
     left: 0;
     width: 2px; /* Thickness of the line */
-    background-color: white;
-    height: 50%; /* Adjust based on your design */
+    background-color: #eca73d;
+    height: 53%; /* Adjust based on your design */
     left: 50%; /* Center the line horizontally */
     transform: translateY(-50%);
 }
 
 li {
-  background: linear-gradient(269.92deg, #eca73d -2.94%, #e0546b 107.98%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-color: #060b3e;
   border: 1px solid #e0546b;
   border-radius: 10px;
   transition: scale 0.3s;
+  z-index: 100;
+  padding: 5px;
 }
 
 li > a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: #eca73d;
 }
 
 li:hover {
@@ -445,7 +445,7 @@ li:hover {
 }
 
 .activeSection {
-  scale: 1.2;
+  scale: 1.4;
 }
 
 /* For smaller screens: Minimum distance */
@@ -461,14 +461,31 @@ li:hover {
     flex-direction: row;
     height: auto;
     top: 70%;
-    top: 70%;
     left: 10%;
     right: 10%;
     gap: 10%;
   }
+  ul:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    margin: 0;
+    margin-left: 10px;
+    margin-top: -25px;
+    top: 45px;
+    width: 40%; /* Thickness of the line */
+    height: 2px;
+    background-color: #eca73d;
+    transform: translateX(-50%);
+  }
 }
 
-@media (max-width: 800px) {
+@media (min-width: 600px) and (max-width: 1199px) {
+  #dos {
+    transform: translateX(6vw); /* Maximum distance */
+  }
+  #tres {
+    transform: translateX(-7vw);
+  }
   ul {
     justify-content: center;
     flex-direction: row;
@@ -477,6 +494,19 @@ li:hover {
     left: 10%;
     right: 10%;
     gap: 10%;
+  }
+
+  ul:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    margin: 0;
+    margin-left: 10px;
+    margin-top: -25px;
+    top: 45px;
+    width: 40%; /* Thickness of the line */
+    height: 2px;
+    background-color: #eca73d;
+    transform: translateX(-50%);
   }
 }
 
