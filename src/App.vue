@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted} from 'vue'
 import Todolist from './components/Todolist.vue'
 
 const routes = {
@@ -16,13 +16,51 @@ const currentView = computed(() => {
   return routes[currentPath.value.slice(1) || null]
 })
 
+function scrollToTop() {
+  window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
+const activeIndex = ref(null);
+
+const handleScroll = () => {
+  const scrollPosition = window.scrollY;
+  if (scrollPosition >= 500 && scrollPosition < 1000) {
+    activeIndex.value = 1; // First item active
+  } else if (scrollPosition >= 1000) {
+    activeIndex.value = 2; // Second item active
+  } else {
+    activeIndex.value = 0; // No item active
+  }
+};
+
 </script>
 
 <template>
   <div v-if="!currentView">
-    <h2><span>A collection of projects</span></h2>
-    <section class="linkContainer">
-      <section class="uno">
+    <header class="container">
+      <h2>A collection of projects</h2>
+    </header>
+    <ul v-scroll-spy-active v-scroll-spy-link>
+      <li :class="{ activeSection: activeIndex === 0 }">
+        <a>To do list</a>
+      </li>
+      <li :class="{ activeSection: activeIndex === 1 }">
+        <a>Coming soon</a>
+      </li>
+      <li :class="{ activeSection: activeIndex === 2 }">
+        <a>Coming soon</a>
+      </li>
+    </ul>
+    <section class="linkContainer" v-scroll-spy>
+      <section id="uno">
         <div class="unotext">
         <a href="#/todo"><img src="/todolist.png"></a>
         <a href="#/todo" id="button">Try the To do list</a>
@@ -30,7 +68,7 @@ const currentView = computed(() => {
         Includes public login connected to PostgreSQL databse via Websocket and 
           fallback HTTP requests for real time synchronisation.</div>
       </section>
-      <section class="dos">
+      <section id="dos">
         <div class="custom-shape-divider-top-1702011878">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
@@ -45,7 +83,7 @@ const currentView = computed(() => {
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, odit fugiat et odio, nam quasi corporis aut delectus distinctio, quas nulla libero consequuntur eos illum ea corrupti quos? Vero, error.
         </div>
       </section>
-      <section class="tres">
+      <section id="tres">
         <div class="custom-shape-divider-top-1702017514">
             <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
                 <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
@@ -73,7 +111,7 @@ const currentView = computed(() => {
         <button><img class="top" src="/icons8-twitter.svg"></button>
       </div>
       <div id="middle">
-        <button>Back</button>
+        <button @click="scrollToTop">Back</button>
         <button>Terms of Use</button>
         <button>Privacy Policy</button>
       </div>
@@ -108,6 +146,7 @@ html {
 </style>
 
 <style scoped>
+
 /*First wave*/
 .custom-shape-divider-top-1702011878 {
     position: relative;
@@ -172,12 +211,19 @@ header, h2{
   justify-content: center;
   margin: 0;
   padding: 20px 0 30px 0px;
-  width: 100%;
   background-color: #060b3e;
 }
 
-header {
-  padding: 0px;
+.container {
+  background-color: #060b3e;
+}
+
+h2 {
+  /* Apply gradient to the text */
+  background: linear-gradient(269.92deg, #eca73d -2.94%, #e0546b 107.98%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 footer {
@@ -229,18 +275,6 @@ button:hover {
   border-radius: 50px;
 }
 
-h2 {
-  background-color: #060b3e;
-}
-
-h2 span {
-  /* Apply gradient to the text */
-  background: linear-gradient(269.92deg, #eca73d -2.94%, #e0546b 107.98%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 section {
   border: 0;
   padding-bottom: 0;
@@ -265,7 +299,7 @@ a {
   transition: background-color 0.3s, color 0.3s, scale 0.3s;
 }
 
-a:hover {
+div > a:hover {
   cursor: pointer;
   color: black;
   scale: 1.05;
@@ -325,7 +359,7 @@ img {
 }
 
 
-.uno, .dos, .tres {
+#uno, #dos, #tres {
   min-width: 300px;
   display: flex;
   flex-direction: column;
@@ -346,36 +380,116 @@ img {
 }
 
 /* Apply transform to shift each section */
-.uno {
+#uno {
   background-color: #060b3e;
   transform: translateX(-20vw); /* Shift slightly to the left */
 }
 
-.dos {
+#dos {
   background-color: white;
 }
 
-.tres {
+#tres {
   background-color: #060b3e;
+}
+
+ul {
+  margin-top: 20vh;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 20vh;
+  width: auto;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  list-style: none;
+  font-size: x-large;
+}
+
+/*Line between scroll spy*/
+ul:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    margin-top: 20vh;
+    margin-left: 20px;
+    top: 40px;
+    left: 0;
+    width: 2px; /* Thickness of the line */
+    background-color: white;
+    height: 50%; /* Adjust based on your design */
+    left: 50%; /* Center the line horizontally */
+    transform: translateY(-50%);
+}
+
+li {
+  background: linear-gradient(269.92deg, #eca73d -2.94%, #e0546b 107.98%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border: 1px solid #e0546b;
+  border-radius: 10px;
+  transition: scale 0.3s;
+}
+
+li > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+li:hover {
+  cursor: pointer;
+}
+
+.activeSection {
+  scale: 1.2;
 }
 
 /* For smaller screens: Minimum distance */
 @media (max-width: 600px) {
-  .dos {
+  #dos {
     transform: translateX(-40px); /* Minimum distance */
   }
-  .tres {
+  #tres {
     transform: translateX(-60px);
+  }
+  ul {
+    justify-content: center;
+    flex-direction: row;
+    height: auto;
+    top: 70%;
+    top: 70%;
+    left: 10%;
+    right: 10%;
+    gap: 10%;
+  }
+}
+
+@media (max-width: 800px) {
+  ul {
+    justify-content: center;
+    flex-direction: row;
+    height: auto;
+    top: 70%;
+    left: 10%;
+    right: 10%;
+    gap: 10%;
   }
 }
 
 /* For larger screens: Maximum distance */
 @media (min-width: 1200px) {
-  .dos {
+  #dos {
     transform: translateX(6vw); /* Maximum distance */
   }
-  .tres {
+  #tres {
     transform: translateX(-7vw);
+  }
+  ul {
+    margin-left: 50px;
   }
 }
 
