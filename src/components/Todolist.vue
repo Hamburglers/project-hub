@@ -260,7 +260,7 @@ function back() {
     <Transition>
       <header>
         <button @click="back" style="font-size:13px">Back</button>
-        <button v-if="!isLoggedIn" @click="login" style="font-size: 13px; width: 100px;">Login / Register</button>
+        <button v-if="!isLoggedIn" @click="login" style="font-size: 13px; width: 100px;">Click to login</button>
         <button v-else @click="logout" style="font-size: 13px; width: 100px;">Logged in</button>
         <button @click="toggleMode"><img :src="switchMode[modeIndex].src" class="white-image"></button>
       </header>

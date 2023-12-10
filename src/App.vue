@@ -80,8 +80,10 @@ function twitter() {
 <template>
   <div class="main" v-if="!currentView">
     <header class="container">
-      <h2>A collection of projects</h2>
+      <h2>hamburgler.xyz</h2>
     </header>
+    <h4>A hub for projects made with&nbsp;<span class="vue">Vue.js</span></h4>
+    <h4 id="last">and hosted using&nbsp;<span class="go">Golang</span></h4>
     <Transition name="fade">
     <ul v-scroll-spy-active v-scroll-spy-link v-show="footerVisible">
       <li :class="{ activeSection: activeIndex === 0 }">
@@ -100,9 +102,12 @@ function twitter() {
         <div class="unotext">
         <a href="#/todo"><img src="/todolist.png"></a>
         <a href="#/todo" id="button">Try the To do list</a>
-        <br>
-        Includes public login connected to PostgreSQL database via Websocket and 
-          fallback HTTP requests for real time synchronisation.</div>
+        </div>
+        <ul class="features">
+          <li>Saves user entries locally</li>
+          <li>Public login system utilizing WebSocket with HTTP fallback, connected to a PostgreSQL database</li>
+          <li>Logged-in users see real-time updates, edits, deletions, and task completions</li>
+        </ul>
       </section>
       <section id="dos">
         <div class="custom-shape-divider-top-1702011878">
@@ -160,11 +165,11 @@ function twitter() {
 </template>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@400;500&display=swap');
 
 body {
   display: flex;
-  font-family: "Roboto", sans-serif;
+  font-family: "Dosis", sans-serif;
   font-size: larger;
   justify-content: center;
   align-items: center;
@@ -183,6 +188,30 @@ html {
 </style>
 
 <style scoped>
+.features > li {
+  color: white;
+  font-size: 15px;
+  width: 35vw;
+  max-width: 400px;
+}
+
+.features {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.vue {
+  color: #40b883;
+}
+
+.go {
+  color: #29BEB0;
+}
 .reveal {
   opacity: 0;
   transform: translateY(80px);
@@ -264,7 +293,7 @@ header, h2{
   display: flex;
   justify-content: center;
   margin: 0;
-  padding: 20px 0 30px 0px;
+  padding: 20px 0 10px 0px;
   background-color: #060b3e;
 }
 
@@ -278,6 +307,20 @@ h2 {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+h4 {
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding: 40px 0 0 0;
+  padding-top: 0;
+  background-color: #060B3E;
+  margin: 0;
+}
+
+#last {
+  padding-bottom: 40px;
 }
 
 footer {
@@ -391,7 +434,7 @@ div > a:hover {
   justify-content: center;
   padding: 40px;
   padding-bottom: 0px;
-  width: 200vw;
+  width: 100vw;
   margin-top: -40px;
 }
 
@@ -409,28 +452,27 @@ button > img {
   border-radius: 0;
 }
 
+
+#uno, #dos, #tres {
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%; /* Full width */
+  padding: 60px 0;
+  transition: transform 0.5s; /* Smooth transition for the transform */
+}
+
 .unotext, .dostext, .trestext {
   max-width: 600px;
   min-width: 300px;
   width: 35vw;
   font-size: 15px;
-  padding: 40px;
-}
-
-
-#uno, #dos, #tres {
-  min-width: 300px;
-  display: flex;
-  flex-direction: column;
-  width: 100%; /* Full width */
-  padding: 60px;
-  transition: transform 0.5s; /* Smooth transition for the transform */
-}
-
-.unotext, .dostext, .trestext {
+  padding: 40px 40px 40px 0;
   font-size: 13px;
   text-align: center;
-  margin: 0 auto;
+  margin: 0;
   color: white;
 }
 
@@ -440,20 +482,15 @@ button > img {
 
 /* Apply transform to shift each section */
 #uno {
+  flex-direction: row;
   background-color: #060b3e;
-  transform: translateX(-20vw); /* Shift slightly to the left */
   background-image: url('/dragon-scales (1).svg');
   background-position: center;
   z-index: 2;
 }
 
-#dos {
-  background-color: white;
-}
-
 #tres {
   background-color: #060b3e;
-  transform: translateX(-20vw); /* Shift slightly to the left */
   background-image: url('/wintery-sunburst.svg');
   background-position: center;
   background-repeat: no-repeat;
@@ -461,7 +498,7 @@ button > img {
   z-index: 2;
 }
 
-ul {
+ul:not(.features) {
   margin-top: 20vh;
   margin-left: 40px;
   background-color: transparent;
@@ -479,7 +516,7 @@ ul {
 }
 
 /*Line between scroll spy*/
-ul:not(:first-child)::before {
+ul:not(:first-child):not(.features)::before {
     content: '';
     position: absolute;
     margin-top: 20vh;
@@ -488,7 +525,7 @@ ul:not(:first-child)::before {
     left: 0;
     width: 2px; /* Thickness of the line */
     background-color: #eca73d;
-    height: 53%; /* Adjust based on your design */
+    height: 50%; /* Adjust based on your design */
     left: 50%; /* Center the line horizontally */
     transform: translateY(-50%);
 }
@@ -519,13 +556,7 @@ li:hover {
 
 /* For smaller screens: Minimum distance */
 @media (max-width: 600px) {
-  #dos {
-    transform: translateX(-40px); /* Minimum distance */
-  }
-  #tres {
-    transform: translateX(-60px);
-  }
-  ul {
+  ul:not(.features) {
     justify-content: center;
     flex-direction: row;
     height: auto;
@@ -536,7 +567,7 @@ li:hover {
     padding-left: 0;
     margin-left: 0;
   }
-  ul:not(:first-child)::before {
+  ul:not(:first-child):not(.features)::before {
     content: '';
     position: absolute;
     margin: 0;
@@ -555,13 +586,7 @@ li:hover {
 }
 
 @media (min-width: 600px) and (max-width: 1199px) {
-  #dos {
-    transform: translateX(6vw); /* Maximum distance */
-  }
-  #tres {
-    transform: translateX(-7vw);
-  }
-  ul {
+  ul:not(.features) {
     justify-content: center;
     flex-direction: row;
     height: auto;
@@ -573,7 +598,7 @@ li:hover {
     margin-left: 0;
   }
 
-  ul:not(:first-child)::before {
+  ul:not(:first-child):not(.features)::before {
     content: '';
     position: absolute;
     margin: 0;
@@ -585,16 +610,14 @@ li:hover {
     background-color: #eca73d;
     transform: translateX(-50%);
   }
+
+  .features > li {
+    width: 25vw;
+  }
 }
 
 /* For larger screens: Maximum distance */
 @media (min-width: 1200px) {
-  #dos {
-    transform: translateX(6vw); /* Maximum distance */
-  }
-  #tres {
-    transform: translateX(-7vw);
-  }
   ul {
     margin-left: 50px;
   }
