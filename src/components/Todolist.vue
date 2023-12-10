@@ -89,7 +89,19 @@ async function editItem(index) {
 
 // If hide completed is selected, filter original list for uncompleted
 const filteredList = computed(() => {
-  return hideCompleted.value ? list.value.filter(item => !item.complete) : list.value;
+  let result = list.value;
+
+  // Apply filter if necessary
+  if (hideCompleted.value) {
+    result = result.filter(item => !item.complete);
+  }
+
+  // Apply sorting if the user is logged in
+  if (isLoggedIn) {
+    return result.slice().sort((a, b) => a.id - b.id);
+  } else {
+    return result;
+  }
 });
 
 // Handle dark mode and light mode
@@ -276,7 +288,6 @@ function back() {
     </footer>
   </div>
 </template>
-
 
 
 <style scoped>
