@@ -540,6 +540,7 @@ li {
   transition: scale 0.3s;
   z-index: 100;
   padding: 5px;
+  width: 100px;
 }
 
 li > a {
@@ -575,7 +576,7 @@ li:hover {
     position: absolute;
     margin: 0;
     margin-left: 0px;
-    margin-top: -25px;
+    margin-top: -27px;
     top: 43px;
     width: calc(20vw + 160px); /* Thickness of the line */
     height: 2px;
@@ -587,6 +588,7 @@ li:hover {
     margin-top: 0;
     align-items: center;
     height: auto;
+    font-size: 15px;
   }
 
   #uno {
@@ -608,6 +610,10 @@ li:hover {
   .unotext {
     padding: 0px;
     padding-bottom: 40px;
+  }
+
+  li {
+    width: 18vw;
   }
 }
 
