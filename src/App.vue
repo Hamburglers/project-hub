@@ -22,10 +22,12 @@ function scrollToTop() {
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
+  window.addEventListener("scroll", reveal);
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
+  window.removeEventListener("scroll", reveal);
 });
 
 
@@ -40,12 +42,38 @@ const handleScroll = () => {
   } else {
     activeIndex.value = 0; // No item active
   }
-  footerVisible.value = !(isNarrowScreen.value && scrollPosition > 1200);
+  footerVisible.value = scrollPosition < 1200;
 };
 
 const footerVisible = ref(true);
-const screenWidth = ref(window.innerWidth);
-const isNarrowScreen = computed(() => screenWidth.value < 1200);
+
+function reveal() {
+  var reveals = document.querySelectorAll(".reveal");
+
+  for (var i = 0; i < reveals.length; i++) {
+    var windowHeight = window.innerHeight;
+    var elementTop = reveals[i].getBoundingClientRect().top;
+    var elementVisible = 150;
+
+    if (elementTop < windowHeight - elementVisible) {
+      reveals[i].classList.add("active");
+    } else {
+      reveals[i].classList.remove("active");
+    }
+  }
+}
+
+function facebook() {
+  window.location.href='https://facebook.com/'
+}
+
+function linkedin() {
+  window.location.href='http://linkedin.com/'
+}
+
+function twitter() {
+  window.location.href='https://twitter.com/'
+}
 
 </script>
 
@@ -84,7 +112,7 @@ const isNarrowScreen = computed(() => screenWidth.value < 1200);
                 <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
             </svg>
         </div>
-        <div class="dostext">
+        <div class="dostext reveal">
         <a href="#/todo"><img class="inverse" src="/blank.png"></a>
         <a href="#/todo" id="button" class="inverse">Coming soon</a>
         <br>
@@ -99,7 +127,7 @@ const isNarrowScreen = computed(() => screenWidth.value < 1200);
                 <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
             </svg>
         </div>
-        <div class="trestext">
+        <div class="trestext reveal">
         <a href="#/todo"><img src="/blank.png"></a>
         <a href="#/todo" id="button">Coming soon</a>
         <br>
@@ -114,9 +142,9 @@ const isNarrowScreen = computed(() => screenWidth.value < 1200);
     </div>
     <footer>
       <div id="top">
-        <button><img class="top" src="/icons8-facebook.svg"></button>
-        <button><img class="top" src="/icons8-linkedin.svg"></button>
-        <button><img class="top" src="/icons8-twitter.svg"></button>
+        <button @click="facebook"><img class="top" src="/icons8-facebook.svg"></button>
+        <button @click="linkedin"><img class="top" src="/icons8-linkedin.svg"></button>
+        <button @click="twitter"><img class="top" src="/icons8-twitter.svg"></button>
       </div>
       <div id="middle">
         <button @click="scrollToTop">Back</button>
@@ -149,11 +177,23 @@ body {
 
 html {
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 </style>
 
 <style scoped>
+
+.reveal {
+  opacity: 0;
+  transform: translateY(100px);
+  transition: opacity 0.5s, transform 0.5s; /* Transition for both opacity and transform */
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0); /* Reset to original position */
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s;

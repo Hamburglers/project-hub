@@ -275,6 +275,8 @@ function back() {
   </div>
 </template>
 
+
+
 <style scoped>
 
 img {
@@ -307,6 +309,7 @@ div#body {
   margin: 0px;
   position: relative;
   box-sizing: border-box;
+  overscroll-behavior: none;
 }
 
 
