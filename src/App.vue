@@ -577,7 +577,7 @@ li:hover {
     margin-left: 0px;
     margin-top: -25px;
     top: 43px;
-    width: calc(20vw + 120px); /* Thickness of the line */
+    width: calc(20vw + 160px); /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
@@ -593,16 +593,21 @@ li:hover {
     flex-direction: column;
   }
 
-  .unotext {
-    padding: 0px;
-    padding-bottom: 40px;
-  }
-  .features {
-    width: fit-content;
+  a > img, a#button {
+    width: 70vw;
+    min-width: 0;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 10px;
   }
 
   .features > li {
-    width: fit-content;
+    width: 70vw;
+  }
+
+  .unotext {
+    padding: 0px;
+    padding-bottom: 40px;
   }
 }
 
@@ -626,7 +631,7 @@ li:hover {
     margin-left: 0px;
     margin-top: -25px;
     top: 45px;
-    width: calc(20vw + 120px); /* Thickness of the line */
+    width: calc(20vw + 160px); /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
@@ -658,7 +663,7 @@ li:hover {
     margin-left: 0px;
     margin-top: -25px;
     top: 45px;
-    width: calc(20vw + 120px); /* Thickness of the line */
+    width: calc(20vw + 160px); /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
