@@ -271,7 +271,8 @@ function back() {
     </TransitionGroup>
     </ul>
     <footer>
-      <button @click="hideCompleted = !hideCompleted" id="hide">Hide completed</button>
+      <button v-show="!hideCompleted" @click="hideCompleted = !hideCompleted" id="hide">Hide completed</button>
+      <button v-show="hideCompleted" @click="hideCompleted = !hideCompleted" id="hide">View completed</button>
     </footer>
   </div>
 </template>
@@ -305,12 +306,13 @@ div#body {
   width: 100vw;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 50px;
   margin: 0px;
   position: relative;
   box-sizing: border-box;
   overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 
@@ -506,13 +508,20 @@ footer {
     font-size: 18px;
   }
 
-  li {
-    overflow: hidden;
-    flex-wrap: nowrap;
+  ul {
+    max-height: 47vh;
   }
 
   h2 {
     font-size: larger;
+  }
+
+  div#body {
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+    justify-content: flex-start;
+    padding-bottom: 0;
   }
 }
 
