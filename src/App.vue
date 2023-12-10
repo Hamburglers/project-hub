@@ -191,8 +191,8 @@ html {
 <style scoped>
 .features > li {
   color: white;
-  font-size: 15px;
-  width: 35vw;
+  font-size: 20px;
+  width: 30vw;
   max-width: 400px;
 }
 
@@ -389,7 +389,7 @@ a {
   height: 20%;
   gap: 10px;
   justify-content: center;
-  font-size: 15px;
+  font-size: 20px;
   border-radius: 5px;
   color: white;
   margin-top: 10px;
@@ -441,7 +441,7 @@ div > a:hover {
 
 img {
   width: 50vw;
-  min-width: 300px;
+  min-width: 400px;
   max-width: 600px;
   height: auto;
   left: 0px;
@@ -467,7 +467,7 @@ button > img {
 
 .unotext, .dostext, .trestext {
   max-width: 600px;
-  min-width: 300px;
+  min-width: 400px;
   width: 35vw;
   font-size: 15px;
   font-size: 13px;
@@ -528,7 +528,7 @@ ul:not(:first-child):not(.features)::before {
   left: 0;
   width: 2px; /* Thickness of the line */
   background-color: #eca73d;
-  height: 50vh; /* Adjust based on your design */
+  height: calc(40vh + 80px); /* Adjust based on your design */
   left: 50%; /* Center the line horizontally */
   transform: translateY(-50%);
 }
@@ -554,11 +554,11 @@ li:hover {
 }
 
 .activeSection {
-  scale: 1.4;
+  scale: 1.3;
 }
 
 /* For smaller screens: Minimum distance */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   ul:not(.features) {
     justify-content: center;
     flex-direction: row;
@@ -575,7 +575,7 @@ li:hover {
     position: absolute;
     margin: 0;
     margin-left: 0px;
-    margin-top: -31px;
+    margin-top: -25px;
     top: 43px;
     width: calc(20vw + 120px); /* Thickness of the line */
     height: 2px;
@@ -584,7 +584,6 @@ li:hover {
   }
 
   li > a {
-    font-size: 10px;
     margin-top: 0;
     align-items: center;
     height: auto;
@@ -599,17 +598,47 @@ li:hover {
     padding-bottom: 40px;
   }
   .features {
-    flex-direction: row;
+    width: fit-content;
   }
 
   .features > li {
-    max-width: 15vw;
-    height: fit-content;
-    font-size: 12px;
+    width: fit-content;
   }
 }
 
-@media (min-width: 600px) and (max-width: 1199px) {
+@media (min-width: 700px) and (max-width: 799px) {
+  ul:not(.features) {
+    justify-content: center;
+    flex-direction: row;
+    height: auto;
+    top: 70%;
+    left: 0;
+    right: 0;
+    gap: 10%;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  ul:not(:first-child):not(.features)::before {
+    content: '';
+    position: absolute;
+    margin: 0;
+    margin-left: 0px;
+    margin-top: -25px;
+    top: 45px;
+    width: calc(20vw + 120px); /* Thickness of the line */
+    height: 2px;
+    background-color: #eca73d;
+    transform: translateX(-50%);
+  }
+
+  .features > li {
+    width: 25vw;
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 800px) and (max-width: 1199px) {
   ul:not(.features) {
     justify-content: center;
     flex-direction: row;
