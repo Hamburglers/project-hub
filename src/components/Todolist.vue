@@ -313,7 +313,7 @@ div#body {
   font-family: "Roboto", sans-serif;
   font-size: larger;
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   flex-direction: column;
   align-items: center;
@@ -529,7 +529,7 @@ footer {
 
   div#body {
     box-sizing: border-box;
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
     justify-content: flex-start;
     padding-bottom: 0;

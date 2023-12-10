@@ -78,7 +78,7 @@ function twitter() {
 </script>
 
 <template>
-  <div v-if="!currentView">
+  <div class="main" v-if="!currentView">
     <header class="container">
       <h2>A collection of projects</h2>
     </header>
@@ -101,7 +101,7 @@ function twitter() {
         <a href="#/todo"><img src="/todolist.png"></a>
         <a href="#/todo" id="button">Try the To do list</a>
         <br>
-        Includes public login connected to PostgreSQL databse via Websocket and 
+        Includes public login connected to PostgreSQL database via Websocket and 
           fallback HTTP requests for real time synchronisation.</div>
       </section>
       <section id="dos">
@@ -183,10 +183,9 @@ html {
 </style>
 
 <style scoped>
-
 .reveal {
   opacity: 0;
-  transform: translateY(100px);
+  transform: translateY(80px);
   transition: opacity 0.5s, transform 0.5s; /* Transition for both opacity and transform */
 }
 
@@ -219,7 +218,7 @@ html {
 }
 
 .custom-shape-divider-top-1702011878 .shape-fill {
-    fill: #060B3E;
+    fill: #e0546b;
 }
 
 /*Second wave*/
@@ -391,6 +390,7 @@ div > a:hover {
   flex-wrap: wrap;
   justify-content: center;
   padding: 40px;
+  padding-bottom: 0px;
   width: 200vw;
   margin-top: -40px;
 }
@@ -403,6 +403,10 @@ img {
   left: 0px;
   border-radius: 15px;
   border: 2px solid black;
+}
+
+button > img {
+  border-radius: 0;
 }
 
 .unotext, .dostext, .trestext {
@@ -438,6 +442,9 @@ img {
 #uno {
   background-color: #060b3e;
   transform: translateX(-20vw); /* Shift slightly to the left */
+  background-image: url('/dragon-scales (1).svg');
+  background-position: center;
+  z-index: 2;
 }
 
 #dos {
@@ -446,6 +453,12 @@ img {
 
 #tres {
   background-color: #060b3e;
+  transform: translateX(-20vw); /* Shift slightly to the left */
+  background-image: url('/wintery-sunburst.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 200%;
+  z-index: 2;
 }
 
 ul {
