@@ -105,8 +105,9 @@ function twitter() {
         </div>
         <ul class="features">
           <li>Saves user entries locally</li>
-          <li>Public login system utilizing WebSocket with HTTP fallback, connected to a PostgreSQL database</li>
-          <li>Logged-in users see real-time updates, edits, deletions, and task completions</li>
+          <li>Public login system</li>
+          <li>Uses Websocket and fallback HTTP requests to PostgreSQL database</li>
+          <li>Logged-in users see real-time edits</li>
         </ul>
       </section>
       <section id="dos">
@@ -469,13 +470,15 @@ button > img {
   min-width: 300px;
   width: 35vw;
   font-size: 15px;
-  padding: 40px 40px 40px 0;
   font-size: 13px;
   text-align: center;
   margin: 0;
   color: white;
 }
 
+.unotext {
+  padding-right: 40px;
+}
 .dostext {
   color: black;
 }
@@ -517,17 +520,17 @@ ul:not(.features) {
 
 /*Line between scroll spy*/
 ul:not(:first-child):not(.features)::before {
-    content: '';
-    position: absolute;
-    margin-top: 20vh;
-    margin-left: 20px;
-    top: 55px;
-    left: 0;
-    width: 2px; /* Thickness of the line */
-    background-color: #eca73d;
-    height: 50%; /* Adjust based on your design */
-    left: 50%; /* Center the line horizontally */
-    transform: translateY(-50%);
+  content: '';
+  position: absolute;
+  margin-top: 20vh;
+  margin-left: 10px;
+  top: 55px;
+  left: 0;
+  width: 2px; /* Thickness of the line */
+  background-color: #eca73d;
+  height: 50vh; /* Adjust based on your design */
+  left: 50%; /* Center the line horizontally */
+  transform: translateY(-50%);
 }
 
 li {
@@ -572,9 +575,9 @@ li:hover {
     position: absolute;
     margin: 0;
     margin-left: 0px;
-    margin-top: -25px;
+    margin-top: -31px;
     top: 43px;
-    width: 40%; /* Thickness of the line */
+    width: calc(20vw + 120px); /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
@@ -582,6 +585,27 @@ li:hover {
 
   li > a {
     font-size: 10px;
+    margin-top: 0;
+    align-items: center;
+    height: auto;
+  }
+
+  #uno {
+    flex-direction: column;
+  }
+
+  .unotext {
+    padding: 0px;
+    padding-bottom: 40px;
+  }
+  .features {
+    flex-direction: row;
+  }
+
+  .features > li {
+    max-width: 15vw;
+    height: fit-content;
+    font-size: 12px;
   }
 }
 
@@ -605,7 +629,7 @@ li:hover {
     margin-left: 0px;
     margin-top: -25px;
     top: 45px;
-    width: 40%; /* Thickness of the line */
+    width: calc(20vw + 120px); /* Thickness of the line */
     height: 2px;
     background-color: #eca73d;
     transform: translateX(-50%);
@@ -619,7 +643,7 @@ li:hover {
 /* For larger screens: Maximum distance */
 @media (min-width: 1200px) {
   ul {
-    margin-left: 50px;
+    padding-left: 20px;
   }
 }
 
