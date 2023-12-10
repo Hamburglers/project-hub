@@ -35,14 +35,14 @@ const activeIndex = ref(null);
 
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
-  if (scrollPosition >= 500 && scrollPosition < 1000) {
+  if (scrollPosition >= 300 && scrollPosition < 750) {
     activeIndex.value = 1; // First item active
-  } else if (scrollPosition >= 1000) {
+  } else if (scrollPosition >= 750) {
     activeIndex.value = 2; // Second item active
   } else {
     activeIndex.value = 0; // No item active
   }
-  footerVisible.value = scrollPosition < 1200;
+  footerVisible.value = scrollPosition < 900;
 };
 
 const footerVisible = ref(true);
