@@ -261,7 +261,8 @@ function back() {
     <ul>
       <TransitionGroup name="list" tag="ul">
         <li v-for="(item, index) in filteredList" :key="item.id" @click="completion(item)"
-            :class="{ complete: item.complete }">{{ item.text }}
+            :class="{ complete: item.complete }">
+            <div id="text">{{ item.text }}</div>
             <div id="buttons">
               <button @click.stop="editItem(index)" class="edit"><img src="/edit.png"></button>
               <button @click.stop="deleteItem(index)" class="delete"><img src="/delete.png"></button>
@@ -300,8 +301,8 @@ div#body {
   font-family: "Roboto", sans-serif;
   font-size: larger;
   display: flex;
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100vh;
+  width: 100vw;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -364,7 +365,7 @@ ul {
   margin: 0px;
   padding: 15px 20px 10px 20px;
   gap: 15px;
-  max-height: 475px;
+  max-height: 350px;
   overflow-x: hidden;
   overflow-y: auto; /* Make it scrollable */
   flex: 1;
@@ -396,6 +397,13 @@ li {
   align-items: center;
   user-select: none;
   transition: transform 0.3s ease;
+}
+
+#text {
+  max-width: 50vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 li:hover {
@@ -482,4 +490,30 @@ footer {
   width: 100%;
   margin-bottom: 0px;
 }
+
+@media (max-width: 600px) {
+  img {
+    width: 15px;
+    height: 15px;
+  }
+
+  button {
+    width: 25px;
+    height: 25px;
+  }
+
+  input, footer, ul {
+    font-size: 18px;
+  }
+
+  li {
+    overflow: hidden;
+    flex-wrap: nowrap;
+  }
+
+  h2 {
+    font-size: larger;
+  }
+}
+
 </style>
