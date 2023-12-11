@@ -35,14 +35,21 @@ const activeIndex = ref(null);
 
 const handleScroll = () => {
   const scrollPosition = window.scrollY;
-  if (scrollPosition >= 300 && scrollPosition < 750) {
-    activeIndex.value = 1; // First item active
-  } else if (scrollPosition >= 750) {
-    activeIndex.value = 2; // Second item active
+  const totalDocumentHeight = document.documentElement.scrollHeight;
+  const viewportHeight = window.innerHeight;
+  const maxScrollPosition = totalDocumentHeight - viewportHeight;
+
+  //38, 77, 92
+  const percentage = scrollPosition / maxScrollPosition
+  console.log(percentage)
+  if (percentage < 0.38) {
+    activeIndex.value = 0; // First item active
+  } else if (percentage < 0.77) {
+    activeIndex.value = 1; // Second item active
   } else {
-    activeIndex.value = 0; // No item active
+    activeIndex.value = 2; // No item active
   }
-  footerVisible.value = scrollPosition < 900;
+  footerVisible.value = percentage < 0.92;
 };
 
 const footerVisible = ref(true);
@@ -141,11 +148,6 @@ function twitter() {
         </div>
       </section>
     </section>
-    <div class="custom-shape-divider-top-1702030206">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M1200 0L0 0 598.97 114.72 1200 0z" class="shape-fill"></path>
-        </svg>
-    </div>
     <footer>
       <div id="top">
         <button @click="facebook"><img class="top" src="/icons8-facebook.svg"></button>
@@ -189,6 +191,9 @@ html {
 </style>
 
 <style scoped>
+svg {
+  padding-bottom: 100px;
+}
 .features > li {
   color: white;
   font-size: 20px;
@@ -234,8 +239,8 @@ html {
 /*First wave*/
 .custom-shape-divider-top-1702011878 {
     position: relative;
-    margin-top: -70px;
-    width: 100%;
+    margin-top: -110px;
+    width: 120%;
     overflow: hidden;
     line-height: 0;
 }
@@ -244,7 +249,7 @@ html {
     position: relative;
     display: block;
     width: 100%;
-    height: 150px;
+    height: 100px;
 }
 
 .custom-shape-divider-top-1702011878 .shape-fill {
@@ -254,8 +259,8 @@ html {
 /*Second wave*/
 .custom-shape-divider-top-1702017514 {
     position: relative;
-    width: 100%;
-    margin-top: -70px;
+    width: 120%;
+    margin-top: -100px;
     overflow: hidden;
     line-height: 0;
 }
@@ -264,7 +269,7 @@ html {
     position: relative;
     display: block;
     width: calc(150% + 1.3px);
-    height: 190px;
+    height: 150px;
 }
 
 .custom-shape-divider-top-1702017514 .shape-fill {
@@ -461,7 +466,7 @@ button > img {
   align-items: center;
   flex-direction: column;
   width: 100%; /* Full width */
-  padding: 60px 0;
+  padding: 100px 0;
   transition: transform 0.5s; /* Smooth transition for the transform */
 }
 
@@ -550,7 +555,7 @@ li > a {
   color: #eca73d;
 }
 
-li:hover {
+li > a:hover {
   cursor: pointer;
 }
 

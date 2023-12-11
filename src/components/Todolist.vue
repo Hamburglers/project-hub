@@ -271,8 +271,10 @@ function back() {
       <button id="add">+</button>
     </form>
     <ul>
-      <TransitionGroup name="list" tag="ul">
-        <li v-for="(item, index) in filteredList" :key="item.id" @click="completion(item)"
+      <transition-group name="list" tag="ul">
+        <li v-for="(item, index) in filteredList"
+            :key="item.id" 
+            @click="completion(item)"
             :class="{ complete: item.complete }">
             <div id="text">{{ item.text }}</div>
             <div id="buttons">
@@ -280,7 +282,7 @@ function back() {
               <button @click.stop="deleteItem(index)" class="delete"><img src="/delete.png"></button>
             </div>
         </li>
-    </TransitionGroup>
+      </transition-group>
     </ul>
     <footer>
       <button v-show="!hideCompleted" @click="hideCompleted = !hideCompleted" id="hide">Hide completed</button>

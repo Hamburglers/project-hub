@@ -5,4 +5,4 @@ Icons from icons8.com
 
 Change list item colours, sizes
 
-Add transition to list item as scroll up
+Add transition to list item as scroll down
