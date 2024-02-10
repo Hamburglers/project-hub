@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted} from 'vue'
 import Todolist from './components/Todolist.vue'
+import Sand from './components/Sandgame.vue'
 
 const routes = {
-  '/todo': Todolist
+  '/todo': Todolist,
+  '/sand': Sand
 }
 
 const currentPath = ref(window.location.hash)
@@ -41,7 +43,6 @@ const handleScroll = () => {
 
   //38, 77, 92
   const percentage = scrollPosition / maxScrollPosition
-  console.log(percentage)
   if (percentage < 0.38) {
     activeIndex.value = 0; // First item active
   } else if (percentage < 0.77) {
@@ -126,8 +127,8 @@ function twitter() {
             </svg>
         </div>
         <div class="dostext reveal">
-        <a href="#/todo"><img class="inverse" src="/blank.png"></a>
-        <a href="#/todo" id="button" class="inverse">Coming soon</a>
+        <a href="#/sand"><img class="inverse" src="/blank.png"></a>
+        <a href="#/sand" id="button" class="inverse">Coming soon</a>
         <br>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, odit fugiat et odio, nam quasi corporis aut delectus distinctio, quas nulla libero consequuntur eos illum ea corrupti quos? Vero, error.
         </div>
@@ -199,6 +200,8 @@ svg {
   font-size: 20px;
   width: 30vw;
   max-width: 400px;
+  padding-left: 10px;
+  box-sizing: border-box;
 }
 
 .features {
@@ -386,7 +389,6 @@ section {
 }
 
 a {
-  box-sizing: border-box;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
