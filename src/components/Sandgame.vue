@@ -13,13 +13,29 @@ for (let x = 20; x < 80; x++) {
 
 const updateGameWorld = () => {
   // Correct the loop to avoid accessing out-of-bounds indices
-  for (let y = height - 1; y > 0; y--) {
+  for (let y = height - 2; y >= 0; y--) {
     for (let x = 0; x < width; x++) {
       if (gameWorld[y][x] === 1 && gameWorld[y + 1][x] === 0) {
         gameWorld[y][x] = 0;
         gameWorld[y + 1][x] = 1;
       }
     }
+  }
+};
+
+const handleCanvasClick = (event, ctx) => {
+  const rect = canvasRef.value.getBoundingClientRect();
+  const scaleX = canvasRef.value.width / rect.width;    // Relationship bitmap vs. element for X
+  const scaleY = canvasRef.value.height / rect.height;  // Relationship bitmap vs. element for Y
+
+  const x = (event.clientX - rect.left) * scaleX; // Convert mouse X to game world X
+  const y = (event.clientY - rect.top) * scaleY; // Convert mouse Y to game world Y
+
+  const cellX = Math.floor(x / cellSize);
+  const cellY = Math.floor(y / cellSize);
+
+  if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
+    gameWorld[cellY][cellX] = 1; // Set the cell to sand
   }
 };
 
@@ -37,6 +53,10 @@ onMounted(() => {
     alert("Failed to get 2D context.");
     return;
   }
+
+  canvas.addEventListener("mousedown", (event) => {
+    handleCanvasClick(event, ctx);
+  })
 
   const gameLoop = () => {
     updateGameWorld();
