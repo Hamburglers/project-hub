@@ -5,6 +5,7 @@ const width = 100; // Width of the game world in cells
 const height = 50; // Height of the game world in cells
 const cellSize = 10; // Size of each cell in pixels
 const gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
+const isMouseDown = ref(false);
 
 // Initialize some cells with sand for demonstration purposes
 for (let x = 20; x < 80; x++) {
@@ -23,23 +24,24 @@ const updateGameWorld = () => {
   }
 };
 
-const handleCanvasClick = (event, ctx) => {
-  const rect = canvasRef.value.getBoundingClientRect();
-  const scaleX = canvasRef.value.width / rect.width;    // Relationship bitmap vs. element for X
-  const scaleY = canvasRef.value.height / rect.height;  // Relationship bitmap vs. element for Y
+const createSandAtMousePosition = () => {
+  if (lastMousePosition.x === null || lastMousePosition.y === null) {
+    return; // Do nothing if we don't have a valid position
+  }
 
-  const x = (event.clientX - rect.left) * scaleX; // Convert mouse X to game world X
-  const y = (event.clientY - rect.top) * scaleY; // Convert mouse Y to game world Y
-
-  const cellX = Math.floor(x / cellSize);
-  const cellY = Math.floor(y / cellSize);
+  // Assuming canvas size is fixed or properly scaled, you might not need to adjust for scaleX and scaleY here
+  const cellX = Math.floor(lastMousePosition.x / cellSize);
+  const cellY = Math.floor(lastMousePosition.y / cellSize);
 
   if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
     gameWorld[cellY][cellX] = 1; // Set the cell to sand
   }
 };
 
+
+
 const canvasRef = ref(null);
+let lastMousePosition = { x: null, y: null };
 
 onMounted(() => {
   const canvas = canvasRef.value;
@@ -54,9 +56,24 @@ onMounted(() => {
     return;
   }
 
-  canvas.addEventListener("mousedown", (event) => {
-    handleCanvasClick(event, ctx);
-  })
+  const handleMouseMove = (event) => {
+    const rect = canvas.getBoundingClientRect();
+    lastMousePosition.x = (event.clientX - rect.left) * (canvas.width / rect.width);
+    lastMousePosition.y = (event.clientY - rect.top) * (canvas.height / rect.height);
+    createSandAtMousePosition();
+  };
+
+  canvas.addEventListener('mousedown', (event) => {
+    isMouseDown.value = true;
+    event.preventDefault(); // Prevent default to avoid potential drag and drop behavior
+    canvas.addEventListener('mousemove', handleMouseMove);
+  });
+
+  window.addEventListener('mouseup', () => {
+    isMouseDown.value = false;
+    canvas.removeEventListener('mousemove', handleMouseMove);
+    lastMousePosition = { x: null, y: null };
+  });
 
   const gameLoop = () => {
     updateGameWorld();
