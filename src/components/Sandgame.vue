@@ -1,22 +1,39 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { reactive, onMounted, ref } from "vue";
 
 const width = 100; // Width of the game world in cells
 const height = 50; // Height of the game world in cells
 const cellSize = 10; // Size of each cell in pixels
-const gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
+let gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
 const isMouseDown = ref(false);
 
 const updateGameWorld = () => {
   for (let y = height - 2; y >= 0; y--) {
     for (let x = 0; x < width; x++) {
-      if (gameWorld[y][x] === 1 && gameWorld[y + 1][x] === 0) {
-        gameWorld[y][x] = 0;
-        gameWorld[y + 1][x] = 1;
+      // Check if the current cell has sand
+      if (gameWorld[y][x] === 1) {
+        // Check if the cell directly below is empty
+        if (gameWorld[y + 1][x] === 0) {
+          gameWorld[y + 1][x] = 1; // Move sand down
+          gameWorld[y][x] = 0;
+        } else if (x > 0 && x < width - 1) { // Ensure there's room to move sideways
+          let randomSign = Math.random() < 0.5 ? -1 : 1;
+          // Check if the adjacent cell in the direction of randomSign is empty
+          // and also ensure the sand doesn't move out of bounds
+          if (gameWorld[y][x + randomSign] === 0 && gameWorld[y + 1][x + randomSign] === 0) {
+            // Only move sand sideways if the spot below the target sideways position is also blocked.
+            // This prevents sand from preferring sideways movement when it could potentially fall further down.
+            if (gameWorld[y + 1][x] !== 0) {
+              gameWorld[y][x + randomSign] = 1;
+              gameWorld[y][x] = 0;
+            }
+          }
+        }
       }
     }
   }
 };
+
 
 const createSandAtMousePosition = () => {
   if (lastMousePosition.x === null || lastMousePosition.y === null) {
@@ -28,7 +45,7 @@ const createSandAtMousePosition = () => {
   const cellY = Math.floor(lastMousePosition.y / cellSize);
 
   if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
-    gameWorld[cellY][cellX] = 1; // Set the cell to sand
+    gameWorld[cellY][cellX] = currentElement.value;
   }
 };
 
@@ -93,19 +110,48 @@ const renderGameWorld = (ctx) => {
   ctx.clearRect(0, 0, width * cellSize, height * cellSize);
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      if (gameWorld[y][x] === 1) {
-        ctx.fillStyle = 'sandybrown'; // Set sand color
-        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-      }
+      ctx.fillStyle = colours[gameWorld[y][x]]
+      ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
 };
+
+// Reactive state to track available elements and their properties
+const elements = reactive({
+  sand: 1,
+  stone: 2
+});
+
+// Update the colours mapping to reflect the new IDs
+const colours = {
+  0: "white", // Empty cell
+  1: "sandybrown", // Sand
+  2: "gray" // Stone
+};
+
+// Ref to track the currently selected element for placement
+const currentElement = ref(elements['sand']);
+
+function selectElement(elementKey) {
+  if (elements[elementKey]) {
+    currentElement.value = elements[elementKey];
+  }
+}
+
+function reset() {
+  gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
+}
 </script>
 
 <template>
   <div>
     <h2>Falling Sand Game</h2>
     <canvas ref="canvasRef" width="600" height="500" style="border: 1px solid black"></canvas>
+    <div>
+      <button @click="selectElement('stone')">Stone</button>
+      <button @click="selectElement('sand')">Sand</button>
+      <button @click="reset()">Reset</button>
+    </div>
   </div>
 </template>
 
