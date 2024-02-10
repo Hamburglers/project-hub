@@ -7,13 +7,7 @@ const cellSize = 10; // Size of each cell in pixels
 const gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
 const isMouseDown = ref(false);
 
-// Initialize some cells with sand for demonstration purposes
-for (let x = 20; x < 80; x++) {
-  gameWorld[20][x] = 1; // Example row filled with "sand"
-}
-
 const updateGameWorld = () => {
-  // Correct the loop to avoid accessing out-of-bounds indices
   for (let y = height - 2; y >= 0; y--) {
     for (let x = 0; x < width; x++) {
       if (gameWorld[y][x] === 1 && gameWorld[y + 1][x] === 0) {
@@ -38,10 +32,9 @@ const createSandAtMousePosition = () => {
   }
 };
 
-
-
 const canvasRef = ref(null);
 let lastMousePosition = { x: null, y: null };
+let createSandInterval;
 
 onMounted(() => {
   const canvas = canvasRef.value;
@@ -66,8 +59,20 @@ onMounted(() => {
   canvas.addEventListener('mousedown', (event) => {
     isMouseDown.value = true;
     event.preventDefault(); // Prevent default to avoid potential drag and drop behavior
+
+    // Update lastMousePosition directly here
+    const rect = canvas.getBoundingClientRect();
+    lastMousePosition.x = (event.clientX - rect.left) * (canvas.width / rect.width);
+    lastMousePosition.y = (event.clientY - rect.top) * (canvas.height / rect.height);
+
+    createSandAtMousePosition(); // Create sand at the initial mouse down position
+
+    if (createSandInterval) clearInterval(createSandInterval);
+    createSandInterval = setInterval(createSandAtMousePosition, 100);
+
     canvas.addEventListener('mousemove', handleMouseMove);
-  });
+});
+
 
   window.addEventListener('mouseup', () => {
     isMouseDown.value = false;
