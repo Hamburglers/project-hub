@@ -1,39 +1,29 @@
 <script setup>
 import { reactive, onMounted, ref } from "vue";
+import { Sand } from '../physics/sand';
+import { Stone } from '../physics/stone';
 
 const width = 100; // Width of the game world in cells
 const height = 50; // Height of the game world in cells
 const cellSize = 10; // Size of each cell in pixels
-let gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
+let gameWorld = Array.from({ length: height }, () => Array(width).fill(null));
 const isMouseDown = ref(false);
 
 const updateGameWorld = () => {
+  let tempWorld = Array.from({ length: height }, () => Array(width).fill(null));
   for (let y = height - 2; y >= 0; y--) {
     for (let x = 0; x < width; x++) {
-      // Check if the current cell has sand
-      if (gameWorld[y][x] === 1) {
-        // Check if the cell directly below is empty
-        if (gameWorld[y + 1][x] === 0) {
-          gameWorld[y + 1][x] = 1; // Move sand down
-          gameWorld[y][x] = 0;
-        } else if (x > 0 && x < width - 1) { // Ensure there's room to move sideways
-          let randomSign = Math.random() < 0.5 ? -1 : 1;
-          // Check if the adjacent cell in the direction of randomSign is empty
-          // and also ensure the sand doesn't move out of bounds
-          if (gameWorld[y][x + randomSign] === 0 && gameWorld[y + 1][x + randomSign] === 0) {
-            // Only move sand sideways if the spot below the target sideways position is also blocked.
-            // This prevents sand from preferring sideways movement when it could potentially fall further down.
-            if (gameWorld[y + 1][x] !== 0) {
-              gameWorld[y][x + randomSign] = 1;
-              gameWorld[y][x] = 0;
-            }
-          }
-        }
+      if (gameWorld[y][x] !== null) {
+        // Use the object's method to determine its new position
+        const { newX, newY } = gameWorld[y][x].updatePosition(gameWorld, width, height, cellSize);
+
+        // Move the object in the tempWorld array
+        tempWorld[newY][newX] = gameWorld[y][x];
       }
     }
   }
+  gameWorld = tempWorld;
 };
-
 
 const createSandAtMousePosition = () => {
   if (lastMousePosition.x === null || lastMousePosition.y === null) {
@@ -45,7 +35,11 @@ const createSandAtMousePosition = () => {
   const cellY = Math.floor(lastMousePosition.y / cellSize);
 
   if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
-    gameWorld[cellY][cellX] = currentElement.value;
+    if (currentElement.value === elements.sand) {
+      gameWorld[cellY][cellX] = new Sand({ x: cellX, y: cellY });
+    } else if (currentElement.value === elements.stone) {
+      gameWorld[cellY][cellX] = new Stone({ x: cellX, y: cellY });
+    }
   }
 };
 
@@ -59,7 +53,7 @@ onMounted(() => {
     console.error("Canvas element not found!");
     return;
   }
-  
+
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     alert("Failed to get 2D context.");
@@ -68,32 +62,34 @@ onMounted(() => {
 
   const handleMouseMove = (event) => {
     const rect = canvas.getBoundingClientRect();
-    lastMousePosition.x = (event.clientX - rect.left) * (canvas.width / rect.width);
-    lastMousePosition.y = (event.clientY - rect.top) * (canvas.height / rect.height);
+    lastMousePosition.x =
+      (event.clientX - rect.left) * (canvas.width / rect.width);
+    lastMousePosition.y =
+      (event.clientY - rect.top) * (canvas.height / rect.height);
     createSandAtMousePosition();
   };
 
-  canvas.addEventListener('mousedown', (event) => {
+  canvas.addEventListener("mousedown", (event) => {
     isMouseDown.value = true;
     event.preventDefault(); // Prevent default to avoid potential drag and drop behavior
 
-    // Update lastMousePosition directly here
     const rect = canvas.getBoundingClientRect();
-    lastMousePosition.x = (event.clientX - rect.left) * (canvas.width / rect.width);
-    lastMousePosition.y = (event.clientY - rect.top) * (canvas.height / rect.height);
+    lastMousePosition.x =
+      (event.clientX - rect.left) * (canvas.width / rect.width);
+    lastMousePosition.y =
+      (event.clientY - rect.top) * (canvas.height / rect.height);
 
     createSandAtMousePosition(); // Create sand at the initial mouse down position
 
     if (createSandInterval) clearInterval(createSandInterval);
-    createSandInterval = setInterval(createSandAtMousePosition, 100);
+    createSandInterval = setInterval(createSandAtMousePosition, 50);
 
-    canvas.addEventListener('mousemove', handleMouseMove);
-});
+    canvas.addEventListener("mousemove", handleMouseMove);
+  });
 
-
-  window.addEventListener('mouseup', () => {
+  window.addEventListener("mouseup", () => {
     isMouseDown.value = false;
-    canvas.removeEventListener('mousemove', handleMouseMove);
+    canvas.removeEventListener("mousemove", handleMouseMove);
     lastMousePosition = { x: null, y: null };
   });
 
@@ -110,8 +106,10 @@ const renderGameWorld = (ctx) => {
   ctx.clearRect(0, 0, width * cellSize, height * cellSize);
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      ctx.fillStyle = colours[gameWorld[y][x]]
-      ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+      if (gameWorld[y][x] !== null) {
+        ctx.fillStyle = gameWorld[y][x].getColor();
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+      }
     }
   }
 };
@@ -119,18 +117,11 @@ const renderGameWorld = (ctx) => {
 // Reactive state to track available elements and their properties
 const elements = reactive({
   sand: 1,
-  stone: 2
+  stone: 2,
 });
 
-// Update the colours mapping to reflect the new IDs
-const colours = {
-  0: "white", // Empty cell
-  1: "sandybrown", // Sand
-  2: "gray" // Stone
-};
-
 // Ref to track the currently selected element for placement
-const currentElement = ref(elements['sand']);
+const currentElement = ref(elements["sand"]);
 
 function selectElement(elementKey) {
   if (elements[elementKey]) {
@@ -139,17 +130,25 @@ function selectElement(elementKey) {
 }
 
 function reset() {
-  gameWorld = Array.from({ length: height }, () => Array(width).fill(0));
+  gameWorld = Array.from({ length: height }, () => Array(width).fill(null));
 }
 </script>
 
 <template>
   <div>
     <h2>Falling Sand Game</h2>
-    <canvas ref="canvasRef" width="600" height="500" style="border: 1px solid black"></canvas>
-    <div>
+    <canvas
+      ref="canvasRef"
+      width="600"
+      height="500"
+      style="border: 1px solid black"
+    ></canvas>
+    <div id="selection">
       <button @click="selectElement('stone')">Stone</button>
       <button @click="selectElement('sand')">Sand</button>
+      <button @click="">Placeholder</button>
+      <button @click="">Placeholder</button>
+      <button @click="">Placeholder</button>
       <button @click="reset()">Reset</button>
     </div>
   </div>
@@ -158,6 +157,12 @@ function reset() {
 <style scoped>
 div {
   text-align: center;
+}
+
+#selection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 canvas {
