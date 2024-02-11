@@ -4,42 +4,31 @@ export class Sand extends GameObject {
         super(1, position, { x: 0, y: 0 }, "sandybrown");
     }
 
-    updatePosition(gameWorld, width, height, cellSize) {
+    updatePosition(gameWorld, width, height) {
+        if (this.position.y === height - 1 || (this.position.y + 1 < height && gameWorld[this.position.y + 1][this.position.x] !== null)) {
+            // If at the bottom or the cell below is occupied, do not move
+            return { newX: this.position.x, newY: this.position.y };
+        }
+    
         // Apply gravity to y velocity
-        this.velocity.y += 1; // Assuming gravity affects y velocity
+        this.velocity.y += 1;
     
         // Calculate potential new position
-        let newX = Math.floor(this.position.x / cellSize);
-        let newY = Math.floor((this.position.y + this.velocity.y) / cellSize);
+        let newX = this.position.x;
+        let newY = Math.min(height - 1, this.position.y + this.velocity.y); // Ensure newY is within bounds
     
-        // Boundary check for the bottom of the game world
-        if (newY >= height) {
-            newY = height - 1; // Keep within bounds
-            this.velocity.y = 0; // Stop moving down
+        // Attempt to move down if the next position is within bounds and not occupied
+        if (newY < height && gameWorld[newY][newX] === null) {
+            // Update the object's position property
+            this.position.x = newX;
+            this.position.y = newY;
+        } else {
+            // Reset velocity if movement is not possible
+            this.velocity.y = 0;
         }
     
-        // Check if the cell directly below is occupied
-        if (newY + 1 < height && gameWorld[newY + 1][newX] !== null) {
-            // Attempt to move left or right if the below cell is occupied
-            const leftFree = newX > 0 && gameWorld[newY][newX - 1] === null;
-            const rightFree = newX < width - 1 && gameWorld[newY][newX + 1] === null;
-    
-            if (leftFree && (!rightFree || Math.random() < 0.5)) {
-                newX -= 1; // Move left
-            } else if (rightFree) {
-                newX += 1; // Move right
-            } else {
-                // Unable to move left or right, stay in place
-                this.velocity.y = 0; // Stop moving down
-                return { newX, newY: Math.floor(this.position.y / cellSize) }; // Return current position
-            }
-        }
-    
-        // Update the object's position property
-        this.position.x = Math.floor(newX * cellSize);
-        this.position.y =  Math.floor(newY * cellSize);
-    
-        return { newX, newY };
+        return { newX: this.position.x, newY: this.position.y };
     }
+    
 
 }

@@ -3,27 +3,39 @@ import { reactive, onMounted, ref } from "vue";
 import { Sand } from '../physics/sand';
 import { Stone } from '../physics/stone';
 
-const width = 100; // Width of the game world in cells
+const width = 60; // Width of the game world in cells
 const height = 50; // Height of the game world in cells
 const cellSize = 10; // Size of each cell in pixels
 let gameWorld = Array.from({ length: height }, () => Array(width).fill(null));
 const isMouseDown = ref(false);
 
+// fix phasing, sand piling
 const updateGameWorld = () => {
   let tempWorld = Array.from({ length: height }, () => Array(width).fill(null));
-  for (let y = height - 2; y >= 0; y--) {
+  for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       if (gameWorld[y][x] !== null) {
-        // Use the object's method to determine its new position
-        const { newX, newY } = gameWorld[y][x].updatePosition(gameWorld, width, height, cellSize);
-
-        // Move the object in the tempWorld array
-        tempWorld[newY][newX] = gameWorld[y][x];
+        // Check if the current particle is a Stone or if it's on the bottom row
+        if (gameWorld[y][x] instanceof Stone || y === height - 1) {
+          tempWorld[y][x] = gameWorld[y][x];
+        } else {
+          // Use the object's method to determine its new position
+          const { newX, newY } = gameWorld[y][x].updatePosition(gameWorld, width, height);
+          // Ensure the new position is within bounds and not occupied
+          if (newY < height && newX < width && tempWorld[newY][newX] === null) {
+            tempWorld[newY][newX] = gameWorld[y][x];
+          } else {
+            // Keep the particle in its current position if the new position is invalid
+            tempWorld[y][x] = gameWorld[y][x];
+          }
+        }
       }
     }
   }
   gameWorld = tempWorld;
 };
+
+
 
 const createSandAtMousePosition = () => {
   if (lastMousePosition.x === null || lastMousePosition.y === null) {
