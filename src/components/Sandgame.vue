@@ -4,9 +4,9 @@ import { Sand } from '../physics/sand';
 import { Stone } from '../physics/stone';
 import '@polymer/paper-button/paper-button.js';
 
-const width = 60; // Width of the game world in cells
-const height = 50; // Height of the game world in cells
-const cellSize = 10; // Size of each cell in pixels
+const width = 120; // Width of the game world in cells
+const height = 100; // Height of the game world in cells
+const cellSize = 5; // Size of each cell in pixels
 let gameWorld = Array.from({ length: height }, () => Array(width).fill(null));
 const isMouseDown = ref(false);
 
@@ -52,6 +52,8 @@ const createSandAtMousePosition = () => {
       gameWorld[cellY][cellX] = new Sand({ x: cellX, y: cellY });
     } else if (currentElement.value === elements.stone) {
       gameWorld[cellY][cellX] = new Stone({ x: cellX, y: cellY });
+    } else if (currentElement.value === elements.delete) {
+      gameWorld[cellY][cellX] = null;
     }
   }
 };
@@ -131,12 +133,14 @@ const renderGameWorld = (ctx) => {
 const elements = reactive({
   sand: 1,
   stone: 2,
+  delete: 99
 });
 
 // Ref to track the currently selected element for placement
 const currentElement = ref(elements["sand"]);
 
 function selectElement(elementKey) {
+  console.log(`${elementKey}`)
   if (elements[elementKey]) {
     currentElement.value = elements[elementKey];
   }
@@ -159,6 +163,7 @@ function reset() {
     <div id="selection">
       <paper-button raised @click="selectElement('stone')">Stone</paper-button>
       <paper-button raised @click="selectElement('sand')">Sand</paper-button>
+      <paper-button raised @click="selectElement('delete')">Deleter</paper-button>
       <paper-button raised @click="reset()">Reset</paper-button>
     </div>
   </div>
@@ -173,7 +178,11 @@ div {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 10px;
+  padding: 10px 10px 10px 0;
+}
+
+paper-button {
+  margin-left: 0px;
 }
 
 canvas {
