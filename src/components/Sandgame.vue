@@ -2,6 +2,7 @@
 import { reactive, onMounted, ref } from "vue";
 import { Sand } from '../physics/sand';
 import { Stone } from '../physics/stone';
+import '@polymer/paper-button/paper-button.js';
 
 const width = 60; // Width of the game world in cells
 const height = 50; // Height of the game world in cells
@@ -156,12 +157,9 @@ function reset() {
       style="border: 1px solid black"
     ></canvas>
     <div id="selection">
-      <button @click="selectElement('stone')">Stone</button>
-      <button @click="selectElement('sand')">Sand</button>
-      <button @click="">Placeholder</button>
-      <button @click="">Placeholder</button>
-      <button @click="">Placeholder</button>
-      <button @click="reset()">Reset</button>
+      <paper-button raised @click="selectElement('stone')">Stone</paper-button>
+      <paper-button raised @click="selectElement('sand')">Sand</paper-button>
+      <paper-button raised @click="reset()">Reset</paper-button>
     </div>
   </div>
 </template>
@@ -175,6 +173,7 @@ div {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 10px;
 }
 
 canvas {
