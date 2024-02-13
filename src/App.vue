@@ -128,9 +128,9 @@ function twitter() {
         </div>
         <div class="dostext reveal">
         <a href="#/sand"><img class="inverse" src="/blank.png"></a>
-        <a href="#/sand" id="button" class="inverse">Coming soon</a>
+        <a href="#/sand" id="button" class="inverse">Falling Sand Game</a>
         <br>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, odit fugiat et odio, nam quasi corporis aut delectus distinctio, quas nulla libero consequuntur eos illum ea corrupti quos? Vero, error.
+        A falling sand game with falling physics
         </div>
       </section>
       <section id="tres">

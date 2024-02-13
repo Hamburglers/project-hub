@@ -10,7 +10,7 @@ const cellSize = 5; // Size of each cell in pixels
 let gameWorld = Array.from({ length: height }, () => Array(width).fill(null));
 const isMouseDown = ref(false);
 
-// fix phasing, sand piling
+// sand piling, brush size, sand phasing
 const updateGameWorld = () => {
   let tempWorld = Array.from({ length: height }, () => Array(width).fill(null));
   for (let y = 0; y < height; y++) {
@@ -140,7 +140,6 @@ const elements = reactive({
 const currentElement = ref(elements["sand"]);
 
 function selectElement(elementKey) {
-  console.log(`${elementKey}`)
   if (elements[elementKey]) {
     currentElement.value = elements[elementKey];
   }
