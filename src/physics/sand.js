@@ -7,10 +7,7 @@ export class Sand extends GameObject {
   // first down, then down and horizontal, lastly horizontal
   updatePosition(gameWorld, width, height) {
     if (
-      this.position.y === height - 1 ||
-      (this.position.y + 1 < height &&
-        gameWorld[this.position.y + 1][this.position.x] !== null)
-    ) {
+      this.position.y === height - 1) {
       // If at the bottom or the cell below is occupied, do not move
       return { newX: this.position.x, newY: this.position.y };
     }
@@ -20,7 +17,7 @@ export class Sand extends GameObject {
     }
 
     // Apply gravity to y velocity
-    this.velocity.y += 1;
+    this.velocity.y += 2;
 
     // Calculate potential new position
     let newX = this.position.x;
@@ -33,9 +30,9 @@ export class Sand extends GameObject {
         // If the cell directly below is occupied, try to move sideways
         newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
         // If it isnt already moving in x direction
-        let canMoveLeft = newX > 0 && gameWorld[newY][newX-1] === null;
+        let canMoveLeft = newX > 0 && newY < height - 1 && gameWorld[newY + 1][newX-1] === null;
         let canMoveRight =
-          newX < width - 1 && gameWorld[newY][newX+1] === null;
+          newX < width - 1 && newY < height - 1 && gameWorld[newY + 1][newX+1] === null;
         if (!this.velocity.x) {
           // Randomly choose a direction if not already moving sideways
           let dir = Math.random() < 0.5 ? -1 : 1;

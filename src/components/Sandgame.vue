@@ -1,8 +1,8 @@
 <script setup>
 import { reactive, onMounted, ref } from "vue";
-import { Sand } from '../physics/sand';
-import { Stone } from '../physics/stone';
-import '@polymer/paper-button/paper-button.js';
+import { Sand } from "../physics/sand";
+import { Stone } from "../physics/stone";
+import "@polymer/paper-button/paper-button.js";
 
 const width = 120; // Width of the game world in cells
 const height = 100; // Height of the game world in cells
@@ -21,7 +21,11 @@ const updateGameWorld = () => {
           tempWorld[y][x] = gameWorld[y][x];
         } else {
           // Use the object's method to determine its new position
-          const { newX, newY } = gameWorld[y][x].updatePosition(gameWorld, width, height);
+          const { newX, newY } = gameWorld[y][x].updatePosition(
+            gameWorld,
+            width,
+            height
+          );
           // Ensure the new position is within bounds and not occupied
           if (newY < height && newX < width && tempWorld[newY][newX] === null) {
             tempWorld[newY][newX] = gameWorld[y][x];
@@ -36,8 +40,6 @@ const updateGameWorld = () => {
   gameWorld = tempWorld;
 };
 
-
-
 const createSandAtMousePosition = () => {
   if (lastMousePosition.x === null || lastMousePosition.y === null) {
     return; // Do nothing if we don't have a valid position
@@ -47,22 +49,27 @@ const createSandAtMousePosition = () => {
   const cellX = Math.floor(lastMousePosition.x / cellSize);
   const cellY = Math.floor(lastMousePosition.y / cellSize);
 
-  const brushSize = parseInt(document.getElementById('brushSize').value, 10);
-  const startX = cellX - brushSize;
-  const startY = cellY - brushSize;
-  const endX = cellX + brushSize;
-  const endY = cellY + brushSize;
+  const brushSize = parseInt(document.getElementById("brushSize").value, 10);
+  // Correcting the brush size calculation
+  const brushSizeOffset = brushSize - 1; // Assuming brushSize 1 means a single cell
+  const startX = cellX - brushSizeOffset;
+  const startY = cellY - brushSizeOffset;
+  const endX = cellX + brushSizeOffset;
+  const endY = cellY + brushSizeOffset;
+
 
   for (let y = startY; y <= endY; y++) {
     for (let x = startX; x <= endX; x++) {
       // Check if the current cell is within the bounds of the game world
-      if (Math.random(1) < 0.7 && x >= 0 && x < width && y >= 0 && y < height) {
-        if (currentElement.value === elements.sand) {
-          gameWorld[y][x] = new Sand({ x, y });
-        } else if (currentElement.value === elements.stone) {
-          gameWorld[y][x] = new Stone({ x, y });
-        } else if (currentElement.value === elements.delete) {
-          gameWorld[y][x] = null;
+      if (x >= 0 && x < width && y >= 0 && y < height) {
+        if (Math.random(1) < 0.7 && brushSize !== 1 || brushSize) {
+          if (currentElement.value === elements.sand) {
+            gameWorld[y][x] = new Sand({ x, y });
+          } else if (currentElement.value === elements.stone) {
+            gameWorld[y][x] = new Stone({ x, y });
+          } else if (currentElement.value === elements.delete) {
+            gameWorld[y][x] = null;
+          }
         }
       }
     }
@@ -118,12 +125,21 @@ onMounted(() => {
     canvas.removeEventListener("mousemove", handleMouseMove);
     lastMousePosition = { x: null, y: null };
   });
+  let lastUpdateTime = 0;
+  const updateInterval = 30; //30
 
-  const gameLoop = () => {
-    updateGameWorld();
+  // Modify the gameLoop function
+  const gameLoop = (timestamp) => {
+    if (!lastUpdateTime) lastUpdateTime = timestamp; // Initialize lastUpdateTime
+    const deltaTime = timestamp - lastUpdateTime;
+
+    if (deltaTime > updateInterval) {
+      updateGameWorld();
+      lastUpdateTime = timestamp;
+    }
+
     renderGameWorld(ctx);
-    const delay = 30;
-    setTimeout(gameLoop, delay);
+    requestAnimationFrame(gameLoop);
   };
 
   gameLoop();
@@ -145,7 +161,7 @@ const renderGameWorld = (ctx) => {
 const elements = reactive({
   sand: 1,
   stone: 2,
-  delete: 99
+  delete: 99,
 });
 
 // Ref to track the currently selected element for placement
@@ -174,10 +190,19 @@ function reset() {
     <div id="selection">
       <paper-button raised @click="selectElement('stone')">Stone</paper-button>
       <paper-button raised @click="selectElement('sand')">Sand</paper-button>
-      <paper-button raised @click="selectElement('delete')">Deleter</paper-button>
+      <paper-button raised @click="selectElement('delete')"
+        >Deleter</paper-button
+      >
       <div id="brush">
         <label for="brushSize">Brush Size:</label>
-        <input type="range" id="brushSize" name="brushSize" min="1" max="5" value="1">
+        <input
+          type="range"
+          id="brushSize"
+          name="brushSize"
+          min="1"
+          max="5"
+          value="1"
+        />
       </div>
       <paper-button raised @click="reset()">Reset</paper-button>
     </div>
