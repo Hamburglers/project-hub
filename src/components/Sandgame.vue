@@ -62,14 +62,15 @@ const createSandAtMousePosition = () => {
     for (let x = startX; x <= endX; x++) {
       // Check if the current cell is within the bounds of the game world
       if (x >= 0 && x < width && y >= 0 && y < height) {
-        if (Math.random(1) < 0.7 && brushSize !== 1 || brushSize) {
-          if (currentElement.value === elements.sand) {
+        if (currentElement.value === elements.sand) {
+          // add Randomness
+          if (Math.random(1) < 0.7 && brushSize !== 1 || brushSize === 1) {
             gameWorld[y][x] = new Sand({ x, y });
-          } else if (currentElement.value === elements.stone) {
-            gameWorld[y][x] = new Stone({ x, y });
-          } else if (currentElement.value === elements.delete) {
-            gameWorld[y][x] = null;
           }
+        } else if (currentElement.value === elements.stone) {
+          gameWorld[y][x] = new Stone({ x, y });
+        } else if (currentElement.value === elements.delete) {
+          gameWorld[y][x] = null;
         }
       }
     }

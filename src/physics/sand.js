@@ -40,16 +40,19 @@ export class Sand extends GameObject {
           if ((dir === -1 && canMoveLeft) || (dir === 1 && canMoveRight)) {
             this.velocity.x = dir;
             newX += this.velocity.x;
+            newY += 1
           }
         } else {
           // Apply existing horizontal velocity if possible
           if ((this.velocity.x > 0 && canMoveRight) || (this.velocity.x < 0 && canMoveLeft)) {
             newX += this.velocity.x;
+            newY += 1
           } else {
             // Reset velocity if movement in the current direction is not possible
             this.velocity.x = 0;
           }
         }
+        this.velocity.y = 1;
         found = true;
         break;
       }
