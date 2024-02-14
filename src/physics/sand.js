@@ -4,6 +4,7 @@ export class Sand extends GameObject {
     super(1, position, { x: 0, y: 1 }, "sandybrown");
   }
 
+  // first down, then down and horizontal, lastly horizontal
   updatePosition(gameWorld, width, height) {
     if (
       this.position.y === height - 1 ||
@@ -14,39 +15,49 @@ export class Sand extends GameObject {
       return { newX: this.position.x, newY: this.position.y };
     }
 
-    if (!this.velocity.y) {
+    if (!this.velocity.y && !this.velocity.x) {
       return { newX: this.position.x, newY: this.position.y };
     }
+
     // Apply gravity to y velocity
     this.velocity.y += 1;
 
     // Calculate potential new position
     let newX = this.position.x;
     let newY = this.position.y;
+    
     let found = false;
     // Incrementally check each cell below the current position
     for (let i = 1; i <= this.velocity.y && newY + i < height; i++) {
-        if (gameWorld[newY + i][newX] !== null) {
-            // If the cell directly below is occupied, try to move sideways
-            newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
-            let canMoveLeft = newX > 0 && gameWorld[newY][newX - 1] === null;
-            let canMoveRight = newX < width - 1 && gameWorld[newY][newX + 1] === null;
-            if (canMoveLeft && canMoveRight) {
-                // If both sides are available, choose randomly
-                newX += Math.random() < 0.5 ? -1 : 1;
-            } else if (canMoveLeft) {
-                // Move left if only left side is available
-                newX -= 1;
-            } else if (canMoveRight) {
-                // Move right if only right side is available
-                newX += 1;
-            }
-            found = true;
-            // If neither side is available, the loop will break, and newY won't change
-            break;
+      if (gameWorld[newY + i][newX] !== null) {
+        // If the cell directly below is occupied, try to move sideways
+        newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
+        // If it isnt already moving in x direction
+        let canMoveLeft = newX > 0 && gameWorld[newY][newX-1] === null;
+        let canMoveRight =
+          newX < width - 1 && gameWorld[newY][newX+1] === null;
+        if (!this.velocity.x) {
+          // Randomly choose a direction if not already moving sideways
+          let dir = Math.random() < 0.5 ? -1 : 1;
+          // Attempt to move in the chosen direction if possible
+          if ((dir === -1 && canMoveLeft) || (dir === 1 && canMoveRight)) {
+            this.velocity.x = dir;
+            newX += this.velocity.x;
+          }
+        } else {
+          // Apply existing horizontal velocity if possible
+          if ((this.velocity.x > 0 && canMoveRight) || (this.velocity.x < 0 && canMoveLeft)) {
+            newX += this.velocity.x;
+          } else {
+            // Reset velocity if movement in the current direction is not possible
+            this.velocity.x = 0;
+          }
         }
+        found = true;
+        break;
+      }
     }
-    
+
     if (!found) {
       newY += Math.min(this.velocity.y, height - 1 - newY);
     }

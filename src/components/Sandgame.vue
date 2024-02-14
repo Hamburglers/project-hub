@@ -47,13 +47,24 @@ const createSandAtMousePosition = () => {
   const cellX = Math.floor(lastMousePosition.x / cellSize);
   const cellY = Math.floor(lastMousePosition.y / cellSize);
 
-  if (cellX >= 0 && cellX < width && cellY >= 0 && cellY < height) {
-    if (currentElement.value === elements.sand) {
-      gameWorld[cellY][cellX] = new Sand({ x: cellX, y: cellY });
-    } else if (currentElement.value === elements.stone) {
-      gameWorld[cellY][cellX] = new Stone({ x: cellX, y: cellY });
-    } else if (currentElement.value === elements.delete) {
-      gameWorld[cellY][cellX] = null;
+  const brushSize = parseInt(document.getElementById('brushSize').value, 10);
+  const startX = cellX - brushSize;
+  const startY = cellY - brushSize;
+  const endX = cellX + brushSize;
+  const endY = cellY + brushSize;
+
+  for (let y = startY; y <= endY; y++) {
+    for (let x = startX; x <= endX; x++) {
+      // Check if the current cell is within the bounds of the game world
+      if (Math.random(1) < 0.7 && x >= 0 && x < width && y >= 0 && y < height) {
+        if (currentElement.value === elements.sand) {
+          gameWorld[y][x] = new Sand({ x, y });
+        } else if (currentElement.value === elements.stone) {
+          gameWorld[y][x] = new Stone({ x, y });
+        } else if (currentElement.value === elements.delete) {
+          gameWorld[y][x] = null;
+        }
+      }
     }
   }
 };
@@ -111,7 +122,8 @@ onMounted(() => {
   const gameLoop = () => {
     updateGameWorld();
     renderGameWorld(ctx);
-    requestAnimationFrame(gameLoop);
+    const delay = 30;
+    setTimeout(gameLoop, delay);
   };
 
   gameLoop();
@@ -163,6 +175,10 @@ function reset() {
       <paper-button raised @click="selectElement('stone')">Stone</paper-button>
       <paper-button raised @click="selectElement('sand')">Sand</paper-button>
       <paper-button raised @click="selectElement('delete')">Deleter</paper-button>
+      <div id="brush">
+        <label for="brushSize">Brush Size:</label>
+        <input type="range" id="brushSize" name="brushSize" min="1" max="5" value="1">
+      </div>
       <paper-button raised @click="reset()">Reset</paper-button>
     </div>
   </div>
@@ -177,7 +193,15 @@ div {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 10px 10px 10px 0;
+  padding: 10px 0px 10px 0;
+  max-width: 600px;
+  justify-content: space-between;
+}
+
+#brush {
+  display: flex;
+  flex-direction: column;
+  max-width: 100px;
 }
 
 paper-button {
