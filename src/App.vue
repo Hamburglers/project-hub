@@ -98,7 +98,7 @@ function twitter() {
         <a>To do list</a>
       </li>
       <li :class="{ activeSection: activeIndex === 1 }">
-        <a>Coming soon</a>
+        <a>Falling Sand</a>
       </li>
       <li :class="{ activeSection: activeIndex === 2 }">
         <a>Coming soon</a>

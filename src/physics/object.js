@@ -6,15 +6,15 @@ export class GameObject {
         this.color = color;
     }
 
-    getColor() {
+    get getColor() {
         return this.color;
     }
 
-    getPosition() {
+    get getPosition() {
         return this.position;
     }
 
-    getVelocity() {
+    get getVelocity() {
         return this.velocity;
     }
 

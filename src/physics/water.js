@@ -1,39 +1,33 @@
 import { GameObject } from "./object";
-export class Sand extends GameObject {
+
+export class Water extends GameObject {
   constructor(position) {
-    super(1, position, { x: 0, y: 1 }, "sandybrown");
-    this.permeable = false;
+    super(1, position, { x: 0, y: 1 }, "lightblue");
+    this.permeable = true;
   }
 
   // first down, then down and horizontal, lastly horizontal
   updatePosition(gameWorld, width, height) {
-    if (
-      this.position.y === height - 1) {
-      // If at the bottom or the cell below is occupied, do not move
-      return { newX: this.position.x, newY: this.position.y };
-    }
-
     if (!this.velocity.y && !this.velocity.x) {
       return { newX: this.position.x, newY: this.position.y };
     }
-
     // Apply gravity to y velocity
     this.velocity.y += 2;
 
     // Calculate potential new position
     let newX = this.position.x;
     let newY = this.position.y;
-    
+
     let found = false;
     // Incrementally check each cell below the current position
     for (let i = 1; i <= this.velocity.y && newY + i < height; i++) {
-      if (gameWorld[newY + i][newX] !== null && !gameWorld[newY + i][newX].permeable) {
+      if (gameWorld[newY + i][newX] !== null) {
         // If the cell directly below is occupied, try to move sideways
         newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
         // If it isnt already moving in x direction
-        let canMoveLeft = newX > 0 && newY < height - 1 && (gameWorld[newY + 1][newX-1] === null || gameWorld[newY + 1][newX-1].permeable);
+        let canMoveLeft = newX > 0 && gameWorld[newY][newX - 1] === null;
         let canMoveRight =
-          newX < width - 1 && newY < height - 1 && (gameWorld[newY + 1][newX+1] === null || gameWorld[newY + 1][newX+1].permeable);
+          newX < width - 1 && gameWorld[newY][newX + 1] === null;
         if (!this.velocity.x) {
           // Randomly choose a direction if not already moving sideways
           let dir = Math.random() < 0.5 ? -1 : 1;
@@ -41,13 +35,14 @@ export class Sand extends GameObject {
           if ((dir === -1 && canMoveLeft) || (dir === 1 && canMoveRight)) {
             this.velocity.x = dir;
             newX += this.velocity.x;
-            newY += 1
           }
         } else {
           // Apply existing horizontal velocity if possible
-          if ((this.velocity.x > 0 && canMoveRight) || (this.velocity.x < 0 && canMoveLeft)) {
+          if (
+            (this.velocity.x > 0 && canMoveRight) ||
+            (this.velocity.x < 0 && canMoveLeft)
+          ) {
             newX += this.velocity.x;
-            newY += 1
           } else {
             // Reset velocity if movement in the current direction is not possible
             this.velocity.x = 0;

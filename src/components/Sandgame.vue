@@ -2,6 +2,7 @@
 import { reactive, onMounted, ref } from "vue";
 import { Sand } from "../physics/sand";
 import { Stone } from "../physics/stone";
+import { Water } from "../physics/water";
 import "@polymer/paper-button/paper-button.js";
 
 const width = 120; // Width of the game world in cells
@@ -17,7 +18,7 @@ const updateGameWorld = () => {
     for (let x = 0; x < width; x++) {
       if (gameWorld[y][x] !== null) {
         // Check if the current particle is a Stone or if it's on the bottom row
-        if (gameWorld[y][x] instanceof Stone || y === height - 1) {
+        if (gameWorld[y][x] instanceof Stone) {
           tempWorld[y][x] = gameWorld[y][x];
         } else {
           // Use the object's method to determine its new position
@@ -27,11 +28,10 @@ const updateGameWorld = () => {
             height
           );
           // Ensure the new position is within bounds and not occupied
-          if (newY < height && newX < width && tempWorld[newY][newX] === null) {
-            tempWorld[newY][newX] = gameWorld[y][x];
-          } else {
-            // Keep the particle in its current position if the new position is invalid
-            tempWorld[y][x] = gameWorld[y][x];
+          if (newY < height && newX < width) {
+            if (tempWorld[newY][newX] === null) {
+              tempWorld[newY][newX] = gameWorld[y][x];
+            }
           }
         }
       }
@@ -57,21 +57,22 @@ const createSandAtMousePosition = () => {
   const endX = cellX + brushSizeOffset;
   const endY = cellY + brushSizeOffset;
 
-
   for (let y = startY; y <= endY; y++) {
     for (let x = startX; x <= endX; x++) {
       // Check if the current cell is within the bounds of the game world
       if (x >= 0 && x < width && y >= 0 && y < height) {
         if (currentElement.value === elements.sand) {
           // add Randomness
-          if (Math.random(1) < 0.7 && brushSize !== 1 || brushSize === 1) {
+          if ((Math.random(1) < 0.7 && brushSize !== 1) || brushSize === 1) {
             gameWorld[y][x] = new Sand({ x, y });
           }
         } else if (currentElement.value === elements.stone) {
           gameWorld[y][x] = new Stone({ x, y });
+        } else if (currentElement.value === elements.water) {
+          gameWorld[y][x] = new Water({ x, y });
         } else if (currentElement.value === elements.delete) {
           gameWorld[y][x] = null;
-        }
+        } 
       }
     }
   }
@@ -151,7 +152,7 @@ const renderGameWorld = (ctx) => {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       if (gameWorld[y][x] !== null) {
-        ctx.fillStyle = gameWorld[y][x].getColor();
+        ctx.fillStyle = gameWorld[y][x].getColor;
         ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
       }
     }
@@ -162,6 +163,7 @@ const renderGameWorld = (ctx) => {
 const elements = reactive({
   sand: 1,
   stone: 2,
+  water: 3,
   delete: 99,
 });
 
@@ -189,11 +191,10 @@ function reset() {
       style="border: 1px solid black"
     ></canvas>
     <div id="selection">
-      <paper-button raised @click="selectElement('stone')">Stone</paper-button>
-      <paper-button raised @click="selectElement('sand')">Sand</paper-button>
-      <paper-button raised @click="selectElement('delete')"
-        >Deleter</paper-button
-      >
+      <paper-button raised @click="selectElement('sand')" style="background-color: sandybrown;">Sand</paper-button>
+      <paper-button raised @click="selectElement('stone')" style="background-color: gray;">Stone</paper-button>
+      <paper-button raised @click="selectElement('delete')">Deleter</paper-button>
+      <paper-button raised @click="reset()" style="background-color: lightcoral;">Reset</paper-button>
       <div id="brush">
         <label for="brushSize">Brush Size:</label>
         <input
@@ -205,7 +206,11 @@ function reset() {
           value="1"
         />
       </div>
-      <paper-button raised @click="reset()">Reset</paper-button>
+      <paper-button raised @click="selectElement('water')" style="background-color: lightblue;">Water</paper-button>
+      <paper-button raised @click="">P2</paper-button>
+      <paper-button raised @click="">P3</paper-button>
+      <paper-button raised @click="">P4</paper-button>
+      <paper-button raised @click="">P5</paper-button>
     </div>
   </div>
 </template>
@@ -221,6 +226,7 @@ div {
   flex-wrap: wrap;
   padding: 10px 0px 10px 0;
   max-width: 600px;
+  gap: 2px;
   justify-content: space-between;
 }
 
@@ -231,7 +237,12 @@ div {
 }
 
 paper-button {
-  margin-left: 0px;
+  margin: 5px 0px;
+  transition: transform 0.3s ease-in-out;
+}
+
+paper-button:hover {
+  transform: scale(1.1);
 }
 
 canvas {
