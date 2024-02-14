@@ -4,6 +4,7 @@ export class Water extends GameObject {
   constructor(position) {
     super(1, position, { x: 0, y: 1 }, "lightblue");
     this.permeable = true;
+    this.moves = 10;
   }
 
   // first down, then down and horizontal, lastly horizontal
@@ -11,6 +12,7 @@ export class Water extends GameObject {
     if (!this.velocity.y && !this.velocity.x) {
       return { newX: this.position.x, newY: this.position.y };
     }
+
     // Apply gravity to y velocity
     this.velocity.y += 2;
 
@@ -25,6 +27,10 @@ export class Water extends GameObject {
         // If the cell directly below is occupied, try to move sideways
         newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
         // If it isnt already moving in x direction
+        if (this.moves === 0) {
+            found = true;
+            break;
+        }
         let canMoveLeft = newX > 0 && gameWorld[newY][newX - 1] === null;
         let canMoveRight =
           newX < width - 1 && gameWorld[newY][newX + 1] === null;
@@ -48,6 +54,7 @@ export class Water extends GameObject {
             this.velocity.x = 0;
           }
         }
+        this.moves -= 1;
         this.velocity.y = 1;
         found = true;
         break;

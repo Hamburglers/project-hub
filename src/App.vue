@@ -127,8 +127,8 @@ function twitter() {
             </svg>
         </div>
         <div class="dostext reveal">
-        <a href="#/sand"><img class="inverse" src="/blank.png"></a>
-        <a href="#/sand" id="button" class="inverse">Falling Sand Game</a>
+        <a href="#/sand"><img class="inverse padded" src="/sand.png"></a>
+        <a href="#/sand" id="button" class="inverse">Try the Falling Sand Game</a>
         <br>
         A falling sand game with falling physics
         </div>
@@ -365,6 +365,10 @@ img.top {
   border: none;
 }
 
+.padded {
+  padding: 10px;
+}
+
 button {
   border: none;
   color: white;
@@ -407,7 +411,7 @@ a {
 div > a:hover {
   cursor: pointer;
   color: black;
-  scale: 1.05;
+  scale: 1.03;
 }
 
 #button:hover {
