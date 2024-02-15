@@ -29,7 +29,6 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   window.addEventListener("scroll", reveal);
   var tl = gsap.timeline();
-  tl.to("#loading", { y:-830, duration: 3, ease: "power4.inOut" });
   tl.fromTo(".title", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2);
   tl.fromTo(".title1", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2.5);
   tl.fromTo(".unotext", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 3);
@@ -113,7 +112,6 @@ function twitter() {
 </script>
 
 <template>
-  <div id="loading">hamburgler.xyz</div>
   <div class="main" v-if="!currentView">
     <header class="container">
       <h2 class="title">hamburgler.xyz</h2>
@@ -221,20 +219,6 @@ html {
 </style>
 
 <style scoped>
-
-#loading {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  bottom: 0;
-  right: 0;
-  background: white;
-  color: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
 svg {
   padding-bottom: 100px;
 }

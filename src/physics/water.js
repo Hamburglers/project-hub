@@ -4,7 +4,6 @@ export class Water extends GameObject {
   constructor(position) {
     super(1, position, { x: 0, y: 1 }, "lightblue");
     this.permeable = true;
-    this.moves = 10;
   }
 
   // first down, then down and horizontal, lastly horizontal
@@ -27,13 +26,23 @@ export class Water extends GameObject {
         // If the cell directly below is occupied, try to move sideways
         newY += i - 1; // Adjust newY to the last unoccupied position above the obstacle
         // If it isnt already moving in x direction
-        if (this.moves === 0) {
-            found = true;
-            break;
-        }
         let canMoveLeft = newX > 0 && gameWorld[newY][newX - 1] === null;
         let canMoveRight =
           newX < width - 1 && gameWorld[newY][newX + 1] === null;
+
+        let allRowsMeetCriteria = true;
+
+        for (let y = newY; y < gameWorld.height; y++) {
+          if (!gameWorld[y].some(element => element === null)) {
+            allRowsMeetCriteria = false;
+            break; // Exit the loop early if any row does not meet the criteria
+          }
+        }
+        
+        if (!allRowsMeetCriteria) {
+          return { newX: this.position.x, newY: this.position.y };
+        }
+
         if (!this.velocity.x) {
           // Randomly choose a direction if not already moving sideways
           let dir = Math.random() < 0.5 ? -1 : 1;
@@ -51,10 +60,9 @@ export class Water extends GameObject {
             newX += this.velocity.x;
           } else {
             // Reset velocity if movement in the current direction is not possible
-            this.velocity.x = 0;
+            this.find = false;
           }
         }
-        this.moves -= 1;
         this.velocity.y = 1;
         found = true;
         break;

@@ -18,7 +18,7 @@ export class Sand extends GameObject {
     }
 
     // Apply gravity to y velocity
-    this.velocity.y += 2;
+    this.velocity.y += 0.5;
 
     // Calculate potential new position
     let newX = this.position.x;
@@ -60,7 +60,7 @@ export class Sand extends GameObject {
     }
 
     if (!found) {
-      newY += Math.min(this.velocity.y, height - 1 - newY);
+      newY += Math.min(Math.floor(this.velocity.y), height - 1 - newY);
     }
 
     // Attempt to move down if the next position is within bounds and not occupied
