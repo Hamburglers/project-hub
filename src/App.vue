@@ -2,6 +2,9 @@
 import { ref, computed, onMounted, onUnmounted} from 'vue'
 import Todolist from './components/Todolist.vue'
 import Sand from './components/Sandgame.vue'
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger)
 
 const routes = {
   '/todo': Todolist,
@@ -25,6 +28,31 @@ function scrollToTop() {
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   window.addEventListener("scroll", reveal);
+  var tl = gsap.timeline();
+  tl.to("#loading", { y:-830, duration: 3, ease: "power4.inOut" });
+  tl.fromTo(".title", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2);
+  tl.fromTo(".title1", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2.5);
+  tl.fromTo(".unotext", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 3);
+  let list = gsap.utils.toArray(".features");
+
+  list.forEach((element) => {
+    tl.fromTo(
+      element.children,
+      { x: -200, autoAlpha: 0 },
+      {
+        x: 0,
+        duration: 0.75,
+        autoAlpha: 1,
+        force3D: true,
+        //not sure what the new ease would be
+        ease: "back.out(1.7)",
+        stagger: 0.15
+      }
+    , 3.5);
+  });
+
+  tl.fromTo(".title3", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 4);
+
 })
 
 onUnmounted(() => {
@@ -82,18 +110,18 @@ function linkedin() {
 function twitter() {
   window.location.href='https://twitter.com/'
 }
-
 </script>
 
 <template>
+  <div id="loading">hamburgler.xyz</div>
   <div class="main" v-if="!currentView">
     <header class="container">
-      <h2>hamburgler.xyz</h2>
+      <h2 class="title">hamburgler.xyz</h2>
     </header>
-    <h4>A hub for projects made with&nbsp;<span class="vue">Vue.js</span></h4>
-    <h4 id="last">and hosted using&nbsp;<span class="go">Golang</span></h4>
+    <h4><span class="title1">A hub for projects made with&nbsp;<span class="vue">Vue.js</span></span></h4>
+    <h4 id="last"><span class="title1">and hosted using&nbsp;<span class="go">Golang</span></span></h4>
     <Transition name="fade">
-    <ul v-scroll-spy-active v-scroll-spy-link v-show="footerVisible">
+    <ul class='title3' v-scroll-spy-active v-scroll-spy-link v-show="footerVisible">
       <li :class="{ activeSection: activeIndex === 0 }">
         <a>To do list</a>
       </li>
@@ -130,7 +158,7 @@ function twitter() {
         <a href="#/sand"><img class="inverse padded" src="/sand.png"></a>
         <a href="#/sand" id="button" class="inverse">Try the Falling Sand Game</a>
         <br>
-        A falling sand game with falling physics
+        A falling sand game with realistic physics and element interactions
         </div>
       </section>
       <section id="tres">
@@ -182,6 +210,7 @@ body {
   min-height: none;
   margin: 0px;
   overflow-x: hidden;
+  overflow-y:hidden;
 }
 
 html {
@@ -192,6 +221,20 @@ html {
 </style>
 
 <style scoped>
+
+#loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  bottom: 0;
+  right: 0;
+  background: white;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
 svg {
   padding-bottom: 100px;
 }
@@ -242,7 +285,7 @@ svg {
 /*First wave*/
 .custom-shape-divider-top-1702011878 {
     position: relative;
-    margin-top: -110px;
+    margin-top: -150px;
     width: 120%;
     overflow: hidden;
     line-height: 0;
@@ -263,9 +306,11 @@ svg {
 .custom-shape-divider-top-1702017514 {
     position: relative;
     width: 120%;
-    margin-top: -100px;
+    margin-top: -200px;
     overflow: hidden;
     line-height: 0;
+    border-bottom: 100px;
+    padding-bottom: 100px;
 }
 
 .custom-shape-divider-top-1702017514 svg {
@@ -472,7 +517,7 @@ button > img {
   align-items: center;
   flex-direction: column;
   width: 100%; /* Full width */
-  padding: 100px 0;
+  padding: 150px 0;
   transition: transform 0.5s; /* Smooth transition for the transform */
 }
 
@@ -510,6 +555,7 @@ button > img {
   background-repeat: no-repeat;
   background-size: 100% 200%;
   z-index: 2;
+  padding: 200px 0 300px 0;
 }
 
 ul:not(.features) {
