@@ -29,9 +29,9 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll);
   window.addEventListener("scroll", reveal);
   var tl = gsap.timeline();
-  tl.fromTo(".title", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2);
-  tl.fromTo(".title1", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2.5);
-  tl.fromTo(".unotext", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 3);
+  tl.fromTo(".title", { y: -50, opacity: 0 }, { y: 0, opacity: 1, duration: 1 });
+  tl.fromTo(".title1", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 0.5);
+  tl.fromTo(".unotext", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 1);
   let list = gsap.utils.toArray(".features");
 
   list.forEach((element) => {
@@ -47,10 +47,10 @@ onMounted(() => {
         ease: "back.out(1.7)",
         stagger: 0.15
       }
-    , 3.5);
+    , 1.5);
   });
 
-  tl.fromTo(".title3", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 4);
+  tl.fromTo(".title3", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 2);
 
 })
 
